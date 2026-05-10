@@ -4,6 +4,8 @@ require("dotenv").config();
 
 const express = require("express");
 const mongoose = require("mongoose");
+const multer = require("multer");
+const { PDFParse } = require("pdf-parse");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const { z } = require("zod");
 
@@ -234,6 +236,27 @@ Now analyze the provided notes and generate the complete connected knowledge gra
   };
 }
 
+// Multer — memory storage, PDF only, 20 MB limit
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 20 * 1024 * 1024 },
+  fileFilter: (_req, file, cb) => {
+    if (file.mimetype === "application/pdf") {
+      cb(null, true);
+    } else {
+      cb(new Error("Only PDF files are accepted"));
+    }
+  },
+});
+
+async function parsePdf(buffer) {
+  const parser = new PDFParse({ data: buffer });
+  const result = await parser.getText();
+  const text = result.text.trim();
+  if (!text) throw new Error("PDF contained no extractable text");
+  return text;
+}
+
 app.get("/health", (_req, res) => {
   res.json({ ok: true, name: "memory-palace-backend-skeleton" });
 });
@@ -269,6 +292,42 @@ app.post("/generate", async (req, res) => {
     return res.status(500).json({
       success: false,
       message: error.message || "Gemini request failed",
+    });
+  }
+});
+
+app.post("/generate-pdf", upload.single("pdf"), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: "A PDF file is required" });
+    }
+
+    const notes = await parsePdf(req.file.buffer);
+    console.log(`PDF parsed — ${notes.length} characters extracted`);
+
+    const geminiResult = await generateWithGemini(notes);
+
+    const record = await saveToMongo({
+      notes,
+      model: geminiResult.model,
+      responseText: geminiResult.responseText,
+      graph: geminiResult.graph,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "PDF parsed, Gemini response validated and saved to MongoDB",
+      data: {
+        id: record._id,
+        model: geminiResult.model,
+        createdAt: geminiResult.createdAt,
+        graph: geminiResult.graph,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message || "PDF processing failed",
     });
   }
 });

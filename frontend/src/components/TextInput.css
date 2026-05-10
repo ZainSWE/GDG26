@@ -21,6 +21,32 @@
   margin: 0;
 }
 
+.input-mode-toggle {
+  display: flex;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 4px;
+  border-radius: 10px;
+}
+
+.mode-btn {
+  padding: 7px 22px;
+  border: none;
+  border-radius: 7px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  transition: background 0.15s, color 0.15s;
+}
+
+.mode-btn--active {
+  background: rgba(123, 47, 255, 0.75);
+  color: white;
+}
+
 .input-box {
   width: 100%;
   max-width: 640px;
@@ -41,6 +67,84 @@
   border-color: rgba(123, 47, 255, 0.6);
 }
 
+.pdf-drop-zone {
+  width: 100%;
+  max-width: 640px;
+  min-height: 180px;
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 24px;
+}
+
+.pdf-drop-zone:hover,
+.pdf-drop-zone--dragging {
+  border-color: rgba(123, 47, 255, 0.7);
+  background: rgba(123, 47, 255, 0.07);
+}
+
+.pdf-drop-zone--filled {
+  border-style: solid;
+  border-color: rgba(123, 47, 255, 0.5);
+  background: rgba(123, 47, 255, 0.06);
+}
+
+.pdf-icon {
+  font-size: 32px;
+}
+
+.pdf-drop-label {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.pdf-drop-hint {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 12px;
+}
+
+.pdf-filename {
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  max-width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pdf-clear-btn {
+  margin-top: 4px;
+  padding: 5px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.pdf-clear-btn:hover {
+  border-color: rgba(255, 80, 80, 0.6);
+  color: rgba(255, 100, 100, 0.9);
+}
+
+.input-error {
+  color: #ff6b6b;
+  font-size: 14px;
+  margin: 0;
+}
+
 .input-btn {
   padding: 14px 40px;
   background: rgba(123, 47, 255, 0.8);
@@ -54,6 +158,11 @@
   transition: background 0.2s;
 }
 
-.input-btn:hover {
+.input-btn:hover:not(:disabled) {
   background: rgba(123, 47, 255, 1);
+}
+
+.input-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
