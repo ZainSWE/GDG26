@@ -1,35 +1,47 @@
 .about {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: center;
+  text-align: center;
   width: 100%;
   min-height: 100vh;
-  padding: 10rem;
+  padding: 8rem 2rem 6rem;
   color: white;
-  margin-top: -5rem;
-  gap: 16px;
+  gap: 0;
 }
 
 .about h1 {
-  margin-bottom: 2rem;
+  margin-bottom: 1.4rem;
+}
+
+.about > .about-subtitle {
+  max-width: 600px;
+  margin-bottom: 1rem;
+  color: rgba(255, 255, 255, 0.50);
+  font-size: 0.88rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 500;
 }
 
 .about p {
-  max-width: 640px;
+  max-width: 580px;
   margin-bottom: 4rem;
-  color: rgba(255, 255, 255, 0.7);
-  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.60);
+  line-height: 1.8;
+  font-size: 1.02rem;
 }
 
 .cards-row {
   display: flex;
-  gap: 32px;
+  gap: 28px;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .card {
-  width: 220px;
-  height: 300px;
+  width: 240px;
+  height: 320px;
   perspective: 1000px;
   cursor: pointer;
 }
@@ -75,8 +87,8 @@
 }
 
 .card-avatar {
-  width: 110px;
-  height: 110px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid rgba(255, 255, 255, 0.2);
@@ -121,3 +133,4 @@
   width: 18px;
   height: 18px;
 }
+

@@ -1,19 +1,31 @@
 .grad-container {
   position: fixed;
   inset: 0;
-  overflow-y: auto;
-  background: #0a0015;
+  overflow: hidden;
+  background: #0e0014;
 }
 
 .grad-blobs {
   position: absolute;
   inset: 0;
-  filter: blur(90px) saturate(160%);
+  filter: blur(115px) saturate(105%);
+}
+
+.grad-container::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.22;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
 }
 
 .blob {
   position: absolute;
-  opacity: 0.8;
+  opacity: 0.20;
   transition: transform 0.3s ease;
   will-change: transform;
 }
@@ -21,7 +33,7 @@
 .blob-1 {
   width: 850px;
   height: 750px;
-  background: radial-gradient(ellipse, #7b2fff, transparent 70%);
+  background: radial-gradient(ellipse, #763de9, transparent 70%);
   top: -200px;
   left: -150px;
   border-radius: 67% 33% 55% 45% / 48% 62% 38% 52%;
@@ -31,7 +43,7 @@
 .blob-2 {
   width: 750px;
   height: 850px;
-  background: radial-gradient(ellipse, #52005b, transparent 70%);
+  background: radial-gradient(ellipse, #001eff, transparent 70%);
   top: -100px;
   left: 20%;
   border-radius: 42% 58% 70% 30% / 55% 40% 60% 45%;
@@ -41,7 +53,7 @@
 .blob-3 {
   width: 800px;
   height: 750px;
-  background: radial-gradient(ellipse, #8800ff, transparent 70%);
+  background: radial-gradient(ellipse, #9000ff, transparent 70%);
   top: 0;
   right: -150px;
   border-radius: 55% 45% 38% 62% / 60% 44% 56% 40%;
@@ -51,7 +63,7 @@
 .blob-4 {
   width: 750px;
   height: 800px;
-  background: radial-gradient(ellipse, #1900ff, transparent 70%);
+  background: radial-gradient(ellipse, #4f02df, transparent 70%);
   bottom: -200px;
   left: 10%;
   border-radius: 38% 62% 45% 55% / 52% 34% 66% 48%;
@@ -61,7 +73,7 @@
 .blob-5 {
   width: 700px;
   height: 750px;
-  background: radial-gradient(ellipse, #010052, transparent 70%);
+  background: radial-gradient(ellipse, #6a0097, transparent 70%);
   bottom: -100px;
   right: 10%;
   border-radius: 60% 40% 52% 48% / 35% 65% 35% 65%;
@@ -134,3 +146,10 @@
   width: 100%;
   height: 100%;
 }
+
+/* Only the About page needs scrolling */
+.grad-content:has(.about) {
+  overflow-y: auto;
+  height: 100svh;
+}
+

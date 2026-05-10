@@ -1,0 +1,207 @@
+{
+"nodes": [
+{
+"id": "root_math2130",
+"title": "MATH2130 Numerical Methods",
+"content": "Course manual for Numerical Methods at the University of Guelph, covering computational techniques to solve mathematical problems that are difficult or impossible to solve by hand.",
+"connected": ["unit_background", "unit_roots", "unit_optimization", "unit_interpolation", "unit_integration", "unit_ivp", "unit_differentiation"],
+"importance": 5
+},
+{
+"id": "unit_background",
+"title": "Mathematical Background",
+"content": "Foundational concepts including error analysis, calculus theorems, Taylor series, and floating-point math essential for numerical analysis.",
+"connected": ["node_error_abs", "node_error_rel", "node_ivt", "node_mvt", "node_taylor", "node_bigo", "node_floating_point"],
+"importance": 4
+},
+{
+"id": "node_error_abs",
+"title": "Absolute Error",
+"content": "The magnitude of the difference between the true value p and the approximation p: |p - p*|.",
+"connected": ["node_error_rel"],
+"importance": 2
+},
+{
+"id": "node_error_rel",
+"title": "Relative Error",
+"content": "The error scaled by the true value: |p - p*| / |p|. Useful when comparing quantities of different scales.",
+"connected": ["node_error_abs"],
+"importance": 3
+},
+{
+"id": "node_ivt",
+"title": "Intermediate Value Theorem (IVT)",
+"content": "If f(x) is continuous on [a, b], then for any k between f(a) and f(b), there exists a c in (a, b) such that f(c) = k.",
+"connected": ["unit_roots", "node_bisection"],
+"importance": 3
+},
+{
+"id": "node_mvt",
+"title": "Mean Value Theorem (MVT)",
+"content": "If f(x) is continuous on [a, b] and differentiable on (a, b), there exists c in (a, b) such that f'(c) = (f(b)-f(a))/(b-a).",
+"connected": ["node_taylor"],
+"importance": 3
+},
+{
+"id": "node_taylor",
+"title": "Taylor's Theorem",
+"content": "Approximates a function near a point x0 using a polynomial and an error (remainder) term. Central to deriving numerical methods.",
+"connected": ["node_bigo", "unit_interpolation", "unit_integration"],
+"importance": 4
+},
+{
+"id": "node_bigo",
+"title": "Big-O Notation",
+"content": "Describes the asymptotic behavior of a function or error as a parameter (like stepsize h or n) approaches a limit.",
+"connected": ["node_taylor"],
+"importance": 3
+},
+{
+"id": "node_floating_point",
+"title": "Floating Point Math",
+"content": "How computers represent and calculate real numbers using finite precision, leading to rounding and chopping errors.",
+"connected": ["unit_background"],
+"importance": 3
+},
+{
+"id": "unit_roots",
+"title": "Root-Finding Methods",
+"content": "Iterative algorithms used to find solutions to equations of the form f(x) = 0.",
+"connected": ["node_bisection", "node_false_position", "node_secant", "node_newton_root"],
+"importance": 4
+},
+{
+"id": "node_bisection",
+"title": "Bisection Method",
+"content": "A root-finding method that repeatedly halves an interval [a, b] where f(a) and f(b) have opposite signs. Guaranteed to converge.",
+"connected": ["node_ivt", "node_false_position"],
+"importance": 3
+},
+{
+"id": "node_false_position",
+"title": "Method of False Position",
+"content": "Similar to bisection but uses a linear interpolant between f(a) and f(b) to find the next estimate.",
+"connected": ["node_bisection", "node_secant"],
+"importance": 2
+},
+{
+"id": "node_secant",
+"title": "Secant Method",
+"content": "An iterative root-finding method that uses the secant line through two points. Does not require bracketing the root.",
+"connected": ["node_false_position", "node_newton_root"],
+"importance": 3
+},
+{
+"id": "node_newton_root",
+"title": "Newton's Method (Roots)",
+"content": "Uses the formula x_{n+1} = xn - f(xn)/f'(xn). Converges quadratically if the initial guess is close enough to the root.",
+"connected": ["node_secant", "node_newton_opt"],
+"importance": 4
+},
+{
+"id": "unit_optimization",
+"title": "Optimization",
+"content": "Methods for finding the maximum or minimum of an objective function.",
+"connected": ["node_newton_opt", "node_gradient_descent"],
+"importance": 4
+},
+{
+"id": "node_newton_opt",
+"title": "Newton's Method for Optimization",
+"content": "Applies Newton's root-finding method to the derivative f'(x) to find critical points where f'(x) = 0.",
+"connected": ["node_newton_root", "node_gradient_descent"],
+"importance": 3
+},
+{
+"id": "node_gradient_descent",
+"title": "Gradient Descent",
+"content": "An iterative optimization algorithm that moves in the direction of the negative gradient to find a local minimum.",
+"connected": ["unit_optimization"],
+"importance": 3
+},
+{
+"id": "unit_interpolation",
+"title": "Curve-Fitting & Interpolation",
+"content": "Creating a polynomial that passes through a discrete set of data points.",
+"connected": ["node_newton_poly", "node_divided_diff"],
+"importance": 4
+},
+{
+"id": "node_newton_poly",
+"title": "Newton Polynomial",
+"content": "A form of the interpolating polynomial expressed using divided differences. Efficient for adding new data points.",
+"connected": ["node_divided_diff"],
+"importance": 3
+},
+{
+"id": "node_divided_diff",
+"title": "Divided Differences",
+"content": "Recursive formula used to calculate the coefficients of a Newton interpolating polynomial.",
+"connected": ["node_newton_poly"],
+"importance": 3
+},
+{
+"id": "unit_integration",
+"title": "Numerical Integration",
+"content": "Approximating the definite integral of a function using discrete samples.",
+"connected": ["node_trapezoid_rule", "node_simpson_rule", "node_riemann_sum"],
+"importance": 4
+},
+{
+"id": "node_riemann_sum",
+"title": "Riemann Sums",
+"content": "Basic approximation of area under a curve using rectangles. Errors converge slowly.",
+"connected": ["node_trapezoid_rule"],
+"importance": 2
+},
+{
+"id": "node_trapezoid_rule",
+"title": "Trapezoid Rule",
+"content": "Approximates the area under a curve using trapezoids (piecewise linear interpolation).",
+"connected": ["node_riemann_sum", "node_simpson_rule"],
+"importance": 3
+},
+{
+"id": "node_simpson_rule",
+"title": "Simpson's Rule",
+"content": "Approximates area using parabolas (piecewise quadratic interpolation). Generally more accurate than the Trapezoid rule.",
+"connected": ["node_trapezoid_rule"],
+"importance": 3
+},
+{
+"id": "unit_ivp",
+"title": "Initial Value Problems (IVPs)",
+"content": "Solving differential equations numerically starting from a known initial condition.",
+"connected": ["node_euler_method", "node_runge_kutta"],
+"importance": 4
+},
+{
+"id": "node_euler_method",
+"title": "Euler's Method",
+"content": "The simplest IVP solver; uses the slope at the current point to step forward: y_{i+1} = yi + h*f(ti, yi).",
+"connected": ["node_runge_kutta"],
+"importance": 3
+},
+{
+"id": "node_runge_kutta",
+"title": "Runge-Kutta Methods",
+"content": "Family of iterative methods (including Midpoint Method and RK4) that use weighted averages of slopes for higher accuracy.",
+"connected": ["node_euler_method", "node_butcher_tableau"],
+"importance": 4
+},
+{
+"id": "node_butcher_tableau",
+"title": "Butcher Tableaus",
+"content": "A tabular format used to represent the coefficients of Runge-Kutta methods.",
+"connected": ["node_runge_kutta"],
+"importance": 2
+},
+{
+"id": "unit_differentiation",
+"title": "Finite Difference Differentiation",
+"content": "Numerical approximations of derivatives using discrete function values and a stepsize h.",
+"connected": ["unit_background"],
+"importance": 4
+}
+]
+}

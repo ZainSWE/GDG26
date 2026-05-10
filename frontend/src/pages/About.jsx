@@ -46,10 +46,12 @@ function ProfileCard({ name, role, github, avatar }) {
 export default function About() {
   return (
     <section className="about">
-      <h1 className="text-hero">About</h1>
-      <p>MindMap is an interactive tool for creating and visualizing mind maps based on your courses pdf notes.
-        It uses advanced natural language processing techniques to extract key concepts and relationships from your notes,
-        allowing you to see the big picture and understand how different ideas are connected.
+      <p className="about-subtitle">The team behind</p>
+      <h1 className="text-hero">Mind Mesh</h1>
+      <p>
+        Mind Mesh transforms your course PDF notes into an interactive knowledge graph.
+        Upload any set of notes, and our AI extracts key concepts, relationships, and
+        summaries letting you visualize the big picture and explore how ideas connect.
       </p>
       <div className="cards-row">
         {team.map(member => (

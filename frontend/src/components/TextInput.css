@@ -1,4 +1,5 @@
 .input-wrapper {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -8,11 +9,31 @@
   padding: 40px;
 }
 
+.input-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('../assets/logo.png');
+  background-repeat: no-repeat;
+  background-position: right -60px center;
+  background-size: 55% auto;
+  opacity: 0.06;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.input-wrapper > * {
+  position: relative;
+  z-index: 1;
+}
+
 .input-title {
-  font-size: 48px;
-  font-weight: 700;
+  font-family: 'Source Serif 4', serif;
+  font-size: 144px;
+  font-weight: 900;
+  font-style: italic;
   color: white;
-  margin: 0;
+  margin-top: -5rem;
 }
 
 .input-sub {
@@ -43,8 +64,10 @@
 }
 
 .mode-btn--active {
-  background: rgba(123, 47, 255, 0.75);
-  color: white;
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255,255,255,0.92);
+  border: 1px solid rgba(255,255,255,0.14);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.16);
 }
 
 .input-box {
@@ -64,7 +87,9 @@
 }
 
 .input-box:focus {
-  border-color: rgba(123, 47, 255, 0.6);
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+  outline: none;
 }
 
 .pdf-drop-zone {
@@ -147,7 +172,7 @@
 
 .input-btn {
   padding: 14px 40px;
-  background: rgba(123, 47, 255, 0.8);
+  background: linear-gradient(135deg, #6a1fff 0%, #9b35e0 60%, #b44fff 100%);
   color: white;
   border: none;
   border-radius: 12px;
@@ -155,14 +180,20 @@
   font-weight: 600;
   font-family: 'Inter', sans-serif;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: filter 0.2s, opacity 0.5s ease;
 }
 
 .input-btn:hover:not(:disabled) {
-  background: rgba(123, 47, 255, 1);
+  filter: brightness(1.12);
 }
 
 .input-btn:disabled {
-  opacity: 0.45;
   cursor: not-allowed;
+}
+
+.input-btn--inactive {
+  opacity: 0.35;
+  cursor: default;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
 }

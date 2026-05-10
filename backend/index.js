@@ -111,10 +111,11 @@ INSTRUCTIONS:
 
 1. Read the entire notes document carefully.
 
-2. Create a concise but comprehensive understanding of the material:
+2. Create a comprehensive understanding of the material:
 
-* Keep explanations short and information-dense.
-* Avoid redundancy and repeated ideas.
+* Write detailed, thorough explanations that give real depth.
+* Include the why, how, when, and where — not just a surface-level definition.
+* Include relevant formulas, mechanisms, edge cases, or practical implications where applicable.
 * Preserve all important concepts, definitions, methods, processes, formulas, events, relationships, and key details necessary for studying.
 * Generalize across any academic subject (science, math, history, engineering, programming, biology, literature, etc.).
 
@@ -140,12 +141,13 @@ INSTRUCTIONS:
   * comparisons
   * or other important studyable information.
 
-4. Node size guidelines:
+4. Node content guidelines:
 
 * Each node should contain ONE focused piece of information.
-* Keep node content short enough to quickly read and memorize.
-* Do not create overly large paragraphs.
-* Split large ideas into multiple connected nodes when necessary.
+* Write 3–6 sentences of rich, detailed content per concept node — enough that a student can understand the topic deeply from that node alone.
+* Include: what the concept is, why it matters, how it works, any key formula or method, and a concrete example or application where relevant.
+* For unit/root nodes: write a paragraph-level overview of the section's scope and purpose.
+* Do not truncate or oversimplify. Depth is more valuable than brevity here.
 
 5. Relationships:
 
@@ -194,7 +196,7 @@ FIELD RULES:
 
 * "id" must be unique
 * "title" should be concise
-* "content" should contain a short explanation or summary
+* "content" should contain a thorough, detailed explanation (3–6 sentences minimum for concept nodes)
 * "connected" must be an array of connected node ids
 * "importance" must be an integer from 1-5
 
