@@ -42,7 +42,7 @@
 
 .input-sub {
   font-size: 16px;
-  color: rgba(255, 255, 255, 0.5);
+  color: white;
   margin: 0;
 }
 
@@ -88,6 +88,10 @@
   resize: vertical;
   outline: none;
   transition: border-color 0.2s;
+}
+
+.input-box::placeholder {
+  color: rgba(255, 255, 255, 0.75);
 }
 
 .input-box:focus {

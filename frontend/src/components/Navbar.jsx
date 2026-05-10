@@ -22,7 +22,7 @@ export default function NavBar({ onGoHome }) {
   return (
     <nav className="top-nav" ref={navRef} aria-label="Course navigation">
       <div className="nav-main">
-        <Link className="brand" to="/" onClick={onGoHome}>Mind Mesh</Link>
+        <Link className="brand" to="/" onClick={onGoHome}>MindMesh</Link>
 
         <div className="nav-controls" ref={controlsRef}>
           <Link className="nav-link" to="/" onClick={onGoHome}>Home</Link>
