@@ -3,6 +3,18 @@ import './TextInput.css'
 
 const BACKEND_URL = 'http://localhost:4000'
 
+// ── DEV PLACEHOLDER ───────────────────────────────────────────────────────────
+// Bypasses the backend and returns a static graph so you can develop without
+// hitting the Gemini rate limit.
+//
+// TO UNDO WHEN DEPLOYING:
+//   1. Delete the PLACEHOLDER_GRAPH constant below.
+//   2. Set USE_PLACEHOLDER = false  (or just delete the entire block).
+//   3. The handleSubmit function will automatically use the real backend again.
+// ─────────────────────────────────────────────────────────────────────────────
+const USE_PLACEHOLDER = true
+const PLACEHOLDER_GRAPH = {"nodes":[{"id":"1","title":"Dummy English Class","content":"An introductory course to fundamental concepts of the English language.","connected":["2","3"],"importance":5},{"id":"2","title":"Unit 1 - Alphabet","content":"Explores the basic symbolic components of the English writing system.","connected":["1","4","5"],"importance":4},{"id":"3","title":"Unit 2 - Words","content":"Focuses on how letters combine to form meaningful units and phrases.","connected":["1","6","7"],"importance":4},{"id":"4","title":"Alphabet Definition","content":"The complete ordered set of letters used in the English language.","connected":["2","5"],"importance":3},{"id":"5","title":"Letter Definition","content":"A fundamental written symbol representing a specific sound within a language.","connected":["2","4","6"],"importance":2},{"id":"6","title":"Word Definition","content":"A collection of one or more letters arranged to convey a specific meaning.","connected":["3","5","7"],"importance":3},{"id":"7","title":"Sentence Definition","content":"A collection of words organized to express a complete thought or meaning.","connected":["3","6"],"importance":3}]}
+
 export default function TextInput({ onSubmit }) {
   const [text, setText] = useState('')
   const [pdfFile, setPdfFile] = useState(null)
@@ -35,6 +47,13 @@ export default function TextInput({ onSubmit }) {
     setLoading(true)
     setError('')
     try {
+      // ── DEV PLACEHOLDER: remove this block when deploying (see top of file) ──
+      if (USE_PLACEHOLDER) {
+        await new Promise((r) => setTimeout(r, 600)) // fake latency
+        onSubmit(PLACEHOLDER_GRAPH)
+        return
+      }
+      // ── END PLACEHOLDER ───────────────────────────────────────────────────────
       let res
       if (mode === 'pdf') {
         const formData = new FormData()
