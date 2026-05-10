@@ -1,0 +1,151 @@
+{
+  "nodes": [
+    {
+      "id": "root_001",
+      "title": "CIS 2910: Sets, Functions, and Proofs",
+      "content": "",
+      "connected": ["unit_1", "unit_2", "unit_3", "unit_4"],
+      "importance": 5
+    },
+    {
+      "id": "unit_1",
+      "title": "Unit 1: Set Theory",
+      "content": "Foundational concepts of sets, subsets, power sets, and set operations.",
+      "connected": ["set_def", "subset_def", "powerset_thm", "set_ops"],
+      "importance": 4
+    },
+    {
+      "id": "set_def",
+      "title": "Set and Cardinality",
+      "content": "A set is a collection of objects. Cardinality |A| is the count of distinct elements.",
+      "connected": ["subset_def"],
+      "importance": 3
+    },
+    {
+      "id": "subset_def",
+      "title": "Subsets and Proper Subsets",
+      "content": "A is a subset of B if all elements of A are in B. Proper subsets must exclude at least one element of B.",
+      "connected": ["powerset_thm"],
+      "importance": 3
+    },
+    {
+      "id": "powerset_thm",
+      "title": "Theorem: Cardinality of Power Sets",
+      "content": "The power set P(A) contains all subsets of A. Its cardinality is |P(A)| = 2^|A|.",
+      "connected": ["set_def"],
+      "importance": 3
+    },
+    {
+      "id": "set_ops",
+      "title": "Union and Intersection",
+      "content": "Intersection (A ∩ B) is elements in both; Union (A ∪ B) is elements in either.",
+      "connected": ["set_def"],
+      "importance": 2
+    },
+    {
+      "id": "unit_2",
+      "title": "Unit 2: Functions",
+      "content": "Definitions of domain, target, range, and well-definedness.",
+      "connected": ["func_def", "welldefined_def", "range_def"],
+      "importance": 4
+    },
+    {
+      "id": "func_def",
+      "title": "Function Definition",
+      "content": "A mapping f: X -> Y where every x in X relates to exactly one y in Y.",
+      "connected": ["welldefined_def", "range_def"],
+      "importance": 3
+    },
+    {
+      "id": "welldefined_def",
+      "title": "Well-defined Functions",
+      "content": "A function is well-defined if every domain element maps to exactly one (not zero or multiple) target element.",
+      "connected": ["func_def"],
+      "importance": 3
+    },
+    {
+      "id": "range_def",
+      "title": "Range",
+      "content": "The subset of the target Y consisting of elements actually mapped to by the domain X.",
+      "connected": ["func_def"],
+      "importance": 2
+    },
+    {
+      "id": "unit_3",
+      "title": "Unit 3: Mathematical Definitions",
+      "content": "Standard definitions for parity, rationality, and number theory.",
+      "connected": ["parity_def", "rational_def", "divides_def", "prime_def"],
+      "importance": 4
+    },
+    {
+      "id": "parity_def",
+      "title": "Even and Odd (Parity)",
+      "content": "Even: x = 2k. Odd: x = 2k + 1. Integers must be one or the other.",
+      "connected": ["unit_3"],
+      "importance": 2
+    },
+    {
+      "id": "rational_def",
+      "title": "Rational Numbers",
+      "content": "Numbers expressible as a/b where a, b are integers and b != 0.",
+      "connected": ["unit_3"],
+      "importance": 2
+    },
+    {
+      "id": "divides_def",
+      "title": "Divisibility",
+      "content": "x divides y if y = kx for some integer k.",
+      "connected": ["prime_def"],
+      "importance": 2
+    },
+    {
+      "id": "prime_def",
+      "title": "Prime and Composite",
+      "content": "Prime: n > 1 divisible only by 1 and n. Composite: n > 1 with a factor m where 1 < m < n.",
+      "connected": ["divides_def"],
+      "importance": 3
+    },
+    {
+      "id": "unit_4",
+      "title": "Unit 4: Proof Techniques",
+      "content": "Methods for proving universal and existential statements and avoiding common errors.",
+      "connected": ["univ_gen", "proof_exh", "exist_proof", "counter_ex"],
+      "importance": 4
+    },
+    {
+      "id": "univ_gen",
+      "title": "Universal Generalization",
+      "content": "Proving a statement for an arbitrary element to conclude it holds for the entire domain.",
+      "connected": ["unit_4"],
+      "importance": 3
+    },
+    {
+      "id": "proof_exh",
+      "title": "Proof by Exhaustion",
+      "content": "Proving a statement by testing every single element in a finite, small domain.",
+      "connected": ["unit_4"],
+      "importance": 2
+    },
+    {
+      "id": "exist_proof",
+      "title": "Existence Proofs",
+      "content": "Constructive (finds/builds example) or Nonconstructive (proves existence without an example).",
+      "connected": ["exist_inst"],
+      "importance": 3
+    },
+    {
+      "id": "exist_inst",
+      "title": "Existential Instantiation",
+      "content": "Logic law: if an object exists, it can be named for the purpose of a proof.",
+      "connected": ["exist_proof"],
+      "importance": 2
+    },
+    {
+      "id": "counter_ex",
+      "title": "Counterexamples",
+      "content": "A single specific instance that proves a universal statement is false.",
+      "connected": ["univ_gen"],
+      "importance": 3
+    }
+  ]
+}

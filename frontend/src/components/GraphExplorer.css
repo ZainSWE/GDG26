@@ -1,0 +1,422 @@
+.explorer-shell {
+  min-height: 100svh;
+  display: grid;
+  grid-template-columns: 290px minmax(0, 1fr);
+  background:
+    radial-gradient(circle at top left, rgba(24, 61, 122, 0.12), transparent 24%),
+    linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%);
+}
+
+.side-nav {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: auto;
+  padding: 22px 16px;
+  background: rgba(9, 20, 41, 0.96);
+  color: #eef5ff;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.side-nav__header h1 {
+  margin: 4px 0 8px;
+  font-size: 1.45rem;
+  line-height: 1.15;
+}
+
+.side-nav__header p {
+  color: #b8c8e6;
+  line-height: 1.45;
+}
+
+.side-nav__eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #7fa7ff;
+}
+
+.nav-group {
+  margin-top: 18px;
+  display: grid;
+  gap: 10px;
+}
+
+.nav-group__block {
+  display: grid;
+  gap: 8px;
+}
+
+.nav-item,
+.nav-subitem {
+  width: 100%;
+  border: 0;
+  text-align: left;
+  cursor: default;
+  color: inherit;
+}
+
+.nav-item {
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #eef5ff;
+  font-weight: 600;
+}
+
+.nav-item.is-active {
+  background: linear-gradient(135deg, #4b7fe6, #88c1ff);
+  color: #08111f;
+}
+
+.nav-item--root {
+  margin-top: 14px;
+}
+
+.nav-subgroup {
+  margin-left: 14px;
+  display: grid;
+  gap: 6px;
+}
+
+.nav-subitem {
+  border-radius: 999px;
+  padding: 9px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #d7e4ff;
+  font-size: 0.92rem;
+}
+
+.nav-subitem.is-active {
+  background: rgba(136, 193, 255, 0.18);
+  color: #ffffff;
+}
+
+.graph-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 18px;
+  padding: 20px;
+  align-items: stretch;
+}
+
+.graph-panel {
+  position: relative;
+  min-height: calc(100svh - 40px);
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(119, 153, 196, 0.22);
+  border-radius: 28px;
+  box-shadow: 0 30px 80px rgba(23, 42, 92, 0.08);
+  overflow: hidden;
+}
+
+.graph-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: calc(100svh - 40px);
+  transform-origin: center center;
+  transition: transform 320ms ease, filter 320ms ease;
+  isolation: isolate;
+}
+
+.graph-stage.is-unit-focus {
+  transform: scale(1.01);
+}
+
+.graph-stage.is-zoomed {
+  transform: scale(1.03);
+}
+
+.graph-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.graph-line {
+  stroke: rgba(30, 64, 129, 0.28);
+  stroke-width: 0.6;
+}
+
+.graph-line--concept {
+  stroke: rgba(72, 132, 220, 0.42);
+  stroke-dasharray: 0.9 1.2;
+}
+
+.graph-node {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  border: 0;
+  border-radius: 50%;
+  color: #071a33;
+  box-shadow: 0 18px 30px rgba(13, 24, 51, 0.12);
+  transform: translate(-50%, -50%) scale(var(--node-scale, 1));
+  transition:
+    left 360ms ease,
+    top 360ms ease,
+    width 260ms ease,
+    height 260ms ease,
+    transform 260ms ease,
+    opacity 260ms ease,
+    box-shadow 260ms ease,
+    filter 260ms ease;
+  cursor: default;
+  z-index: 3;
+  pointer-events: auto;
+}
+
+.graph-node span {
+  display: block;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.graph-node--root {
+  width: 184px;
+  height: 184px;
+  background: radial-gradient(circle at 30% 30%, #fff, #cfe0ff 80%);
+  font-weight: 800;
+  font-size: 1.05rem;
+  --node-scale: 1.12;
+  z-index: 5;
+}
+
+.graph-node--unit {
+  width: 134px;
+  height: 134px;
+  background: linear-gradient(180deg, #ecf5ff 0%, #d6e8ff 100%);
+  font-weight: 700;
+  font-size: 0.88rem;
+}
+
+.graph-node--concept {
+  width: 118px;
+  height: 118px;
+  background: linear-gradient(180deg, #fff 0%, #e7f1ff 100%);
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.graph-node.is-active {
+  box-shadow: 0 22px 42px rgba(15, 39, 82, 0.2);
+  filter: saturate(1.1);
+  --node-scale: 1.12;
+}
+
+.graph-node.is-emphasis:not(.is-active) {
+  opacity: 0.92;
+  --node-scale: 1.04;
+}
+
+.graph-node.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+  filter: blur(1px);
+  --node-scale: 0.82;
+}
+
+.graph-stage.is-unit-focus .graph-node--unit:not(.is-active) {
+  opacity: 0.12;
+  --node-scale: 0.86;
+}
+
+/* Focused unit should grow and sit on top when the stage is in unit-focus */
+.graph-stage.is-unit-focus .graph-node--unit.is-active {
+  width: 180px;
+  height: 180px;
+  --node-scale: 1.12;
+  z-index: 6;
+}
+
+/* Also make the focused unit slightly larger when fully zoomed, but not so large it blocks concepts */
+.graph-stage.is-zoomed .graph-node--unit.is-active {
+  width: 200px;
+  height: 200px;
+  --node-scale: 1.14;
+  z-index: 6;
+}
+
+/* Bring concept nodes above the focused unit so they remain visible around it */
+.graph-stage.is-unit-focus .graph-node--concept,
+.graph-stage.is-zoomed .graph-node--concept {
+  z-index: 8;
+}
+
+/* Focused concept should move to center and grow, similar to focused unit */
+.graph-stage.is-unit-focus .graph-node--concept.is-active,
+.graph-stage.is-zoomed .graph-node--concept.is-active {
+  width: 180px;
+  height: 180px;
+  --node-scale: 1.18;
+  z-index: 12;
+  pointer-events: auto;
+}
+
+/* Ensure focused concept is positioned exactly like focused unit (overrides inline style) */
+.graph-stage.is-concept-focus .graph-node--concept.is-active {
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) scale(var(--node-scale, 1.18)) !important;
+}
+
+/* Ensure a focused concept is visible and interactive even when the stage isn't unit-focus */
+.graph-stage.is-concept-focus .graph-node--concept.is-active {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  z-index: 14 !important;
+}
+
+.graph-stage:not(.is-unit-focus) .graph-node--concept {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.graph-stage.is-zoomed .graph-node--unit:not(.is-active) {
+  opacity: 0.06;
+  --node-scale: 0.78;
+}
+
+.graph-stage.is-zoomed .graph-node--root {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.graph-stage.is-unit-focus .graph-node--root,
+.graph-stage.is-zoomed .graph-node--root {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.graph-stage.is-zoomed .graph-node--concept:not(.is-active) {
+  opacity: 0.72;
+}
+
+.detail-panel {
+  min-height: calc(100svh - 40px);
+}
+
+.detail-card {
+  height: 100%;
+  padding: 22px;
+  border-radius: 24px;
+  background: rgba(10, 21, 41, 0.94);
+  color: #edf4ff;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 18px 38px rgba(10, 19, 36, 0.2);
+}
+
+.detail-card--empty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+}
+
+.detail-card h2 {
+  text-align: left;
+  margin-bottom: 6px;
+  font-size: 1.6rem;
+}
+
+.detail-card__prompt {
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #9ec5ff;
+}
+
+.detail-card--empty p {
+  max-width: 28ch;
+  line-height: 1.65;
+  color: #d3e0f4;
+}
+
+.detail-card__unit,
+.detail-card__meta {
+  color: #b9cae7;
+}
+
+.detail-section {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.detail-section h3 {
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+  color: #ffffff;
+}
+
+.detail-section ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.detail-section li + li {
+  margin-top: 8px;
+}
+
+@media (max-width: 1180px) {
+  .explorer-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .side-nav {
+    position: relative;
+    height: auto;
+  }
+
+  .graph-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-panel {
+    min-height: auto;
+  }
+
+  .graph-panel,
+  .graph-stage {
+    min-height: 760px;
+  }
+}
+
+@media (max-width: 720px) {
+  .graph-workspace {
+    padding: 14px;
+  }
+
+  .graph-panel,
+  .graph-stage {
+    min-height: 680px;
+  }
+
+  .graph-node--root {
+    width: 148px;
+    height: 148px;
+    font-size: 0.92rem;
+  }
+
+  .graph-node--unit {
+    width: 110px;
+    height: 110px;
+    font-size: 0.75rem;
+  }
+
+  .graph-node--concept {
+    width: 96px;
+    height: 96px;
+    font-size: 0.68rem;
+  }
+
+  .detail-card {
+    padding: 18px;
+  }
+}
