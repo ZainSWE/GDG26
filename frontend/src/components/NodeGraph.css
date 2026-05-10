@@ -1,0 +1,64 @@
+.graph-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 28px 0 18px;
+}
+.graph-container {
+  position: relative;
+  width: min(90vw, 620px);
+  aspect-ratio: 1;
+}
+.node-circle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(calc(-50% + var(--x, 0px)), calc(-50% + var(--y, 0px)));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 126px;
+  height: 126px;
+  border-radius: 50%;
+  background: #e5f0ff;
+  color: #0a2247;
+  text-align: center;
+  padding: 10px;
+  box-shadow: 0 8px 18px rgba(8, 18, 38, 0.12);
+  text-decoration: none;
+  line-height: 1.25;
+}
+.center-node {
+  width: 170px;
+  height: 170px;
+  font-weight: 700;
+  background: #14366f;
+  color: #fff;
+}
+.unit-node {
+  width: 126px;
+  height: 126px;
+  border-radius: 50%;
+  background: #d9ebff;
+  color: #0a2854;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+  font-size: 0.82rem;
+  line-height: 1.2;
+}
+.unit-node:hover {
+  transform: translate(calc(-50% + var(--x, 0px)), calc(-50% + var(--y, 0px))) scale(1.05);
+  box-shadow: 0 10px 20px rgba(2, 8, 23, 0.18);
+}
+
+@media (max-width: 700px) {
+  .center-node {
+    width: 142px;
+    height: 142px;
+    font-size: 0.95rem;
+  }
+
+  .unit-node {
+    width: 108px;
+    height: 108px;
+    font-size: 0.74rem;
+  }
+}

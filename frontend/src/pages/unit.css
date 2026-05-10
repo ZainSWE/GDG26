@@ -1,0 +1,68 @@
+.unit-page {
+	padding: 24px;
+}
+
+.unit-summary {
+	max-width: 760px;
+	margin: 0 auto 12px;
+	text-align: center;
+	color: #516179;
+}
+
+.concept-graph {
+	position: relative;
+	width: min(90vw, 620px);
+	aspect-ratio: 1;
+	margin: 24px auto;
+}
+
+.node-circle {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(calc(-50% + var(--x, 0px)), calc(-50% + var(--y, 0px)));
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 10px;
+	text-align: center;
+}
+
+.concept-node {
+	width: 132px;
+	height: 132px;
+	border-radius: 50%;
+	background: #e8f3ff;
+	color: #052a4a;
+	text-decoration: none;
+	transition: transform 160ms ease, box-shadow 160ms ease;
+	line-height: 1.2;
+	font-size: 0.8rem;
+}
+
+.concept-node:hover {
+	transform: translate(calc(-50% + var(--x, 0px)), calc(-50% + var(--y, 0px))) scale(1.05);
+	box-shadow: 0 10px 20px rgba(2, 8, 23, 0.16);
+}
+
+.center {
+	width: 164px;
+	height: 164px;
+	border-radius: 50%;
+	background: #0c2b5a;
+	color: #fff;
+	font-weight: 700;
+}
+
+@media (max-width: 700px) {
+	.concept-node {
+		width: 110px;
+		height: 110px;
+		font-size: 0.72rem;
+	}
+
+	.center {
+		width: 140px;
+		height: 140px;
+	}
+}
