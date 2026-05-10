@@ -264,6 +264,7 @@ async function parsePdf(buffer) {
 }
 
 app.get("/health", (_req, res) => {
+    console.log("Health check received");
   res.json({ ok: true, name: "memory-palace-backend-skeleton" });
 });
 
