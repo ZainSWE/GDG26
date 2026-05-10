@@ -37,7 +37,7 @@ export default function NavBar({ onGoHome }) {
           </a>
           <a
             className="nav-link"
-            href="https://devpost.com"
+            href="https://devpost.com/software/mindmesh-mks1g6"
             target="_blank"
             rel="noreferrer"
           >

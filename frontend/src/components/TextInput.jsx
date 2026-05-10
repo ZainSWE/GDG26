@@ -26,14 +26,27 @@ export default function TextInput({ onSubmit }) {
   const [dragging, setDragging] = useState(false)
   const fileInputRef = useRef(null)
   const wrapperRef   = useRef(null)
+  const titleRef     = useRef(null)
 
-  // GSAP entrance — stagger children up from below
+  // GSAP entrance — stagger non-title children up from below
   useEffect(() => {
     if (!wrapperRef.current) return
-    const els = wrapperRef.current.children
+    const els = Array.from(wrapperRef.current.children).filter(
+      el => !el.classList.contains('input-title')
+    )
     gsap.fromTo(els,
       { y: 24, opacity: 0 },
       { y: 0, opacity: 1, duration: 0.5, stagger: 0.07, ease: 'power2.out', clearProps: 'y,opacity' }
+    )
+  }, [])
+
+  // GSAP title — each letter slides up + fades in, left to right
+  useEffect(() => {
+    if (!titleRef.current) return
+    const letters = titleRef.current.querySelectorAll('span')
+    gsap.fromTo(letters,
+      { y: 48, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.6, stagger: 0.04, ease: 'power3.out', clearProps: 'transform,opacity' }
     )
   }, [])
 
@@ -99,7 +112,11 @@ export default function TextInput({ onSubmit }) {
 
   return (
     <div className="input-wrapper" ref={wrapperRef}>
-      <h1 className="input-title">MindMesh</h1>
+      <h1 className="input-title" ref={titleRef}>
+        {'MindMesh'.split('').map((char, i) => (
+          <span key={i}>{char}</span>
+        ))}
+      </h1>
       <p className="input-sub">Paste your notes or upload a PDF to generate a knowledge graph</p>
 
       <div className="input-mode-toggle">

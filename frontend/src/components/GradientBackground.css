@@ -2,108 +2,96 @@
   position: fixed;
   inset: 0;
   overflow: hidden;
-  background: #0e0014;
+  background: #000000;
 }
 
 .grad-blobs {
   position: absolute;
   inset: 0;
-  filter: blur(115px) saturate(105%);
-}
-
-.grad-container::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  opacity: 0.22;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 256px 256px;
+  filter: blur(130px) saturate(160%);
 }
 
 .blob {
   position: absolute;
-  opacity: 0.20;
+  opacity: 0.55;
   transition: transform 0.3s ease;
   will-change: transform;
 }
 
 .blob-1 {
-  width: 850px;
-  height: 750px;
-  background: radial-gradient(ellipse, #763de9, transparent 70%);
-  top: -200px;
-  left: -150px;
+  width: 1100px;
+  height: 1000px;
+  background: radial-gradient(ellipse, #cc00ff 0%, #7700cc 45%, transparent 70%);
+  bottom: -300px;
+  left: -250px;
   border-radius: 67% 33% 55% 45% / 48% 62% 38% 52%;
-  animation: move1 14s ease-in-out infinite, morph1 8s ease-in-out infinite;
+  animation: move1 8.4s ease-in-out infinite, morph1 4.8s ease-in-out infinite;
 }
 
 .blob-2 {
-  width: 750px;
-  height: 850px;
-  background: radial-gradient(ellipse, #001eff, transparent 70%);
-  top: -100px;
-  left: 20%;
+  width: 900px;
+  height: 950px;
+  background: radial-gradient(ellipse, #e000ff 0%, #9900cc 50%, transparent 70%);
+  bottom: -100px;
+  left: -100px;
   border-radius: 42% 58% 70% 30% / 55% 40% 60% 45%;
-  animation: move2 17s ease-in-out infinite, morph2 10s ease-in-out infinite;
+  animation: move2 10.2s ease-in-out infinite, morph2 6s ease-in-out infinite;
 }
 
 .blob-3 {
-  width: 800px;
-  height: 750px;
-  background: radial-gradient(ellipse, #9000ff, transparent 70%);
-  top: 0;
-  right: -150px;
+  width: 700px;
+  height: 650px;
+  background: radial-gradient(ellipse, #9933ff 0%, #5500aa 55%, transparent 70%);
+  top: 20%;
+  left: 5%;
   border-radius: 55% 45% 38% 62% / 60% 44% 56% 40%;
-  animation: move3 11s ease-in-out infinite, morph3 9s ease-in-out infinite;
+  animation: move3 6.6s ease-in-out infinite, morph3 5.4s ease-in-out infinite;
 }
 
 .blob-4 {
   width: 750px;
   height: 800px;
-  background: radial-gradient(ellipse, #4f02df, transparent 70%);
-  bottom: -200px;
-  left: 10%;
+  background: radial-gradient(ellipse, #bb00ee 0%, #660099 55%, transparent 70%);
+  top: -150px;
+  left: -200px;
   border-radius: 38% 62% 45% 55% / 52% 34% 66% 48%;
-  animation: move4 16s ease-in-out infinite, morph4 12s ease-in-out infinite;
+  animation: move4 9.6s ease-in-out infinite, morph4 7.2s ease-in-out infinite;
 }
 
 .blob-5 {
-  width: 700px;
-  height: 750px;
-  background: radial-gradient(ellipse, #6a0097, transparent 70%);
-  bottom: -100px;
-  right: 10%;
+  width: 600px;
+  height: 650px;
+  background: radial-gradient(ellipse, #ff00cc 0%, #990088 55%, transparent 70%);
+  bottom: 10%;
+  left: 15%;
   border-radius: 60% 40% 52% 48% / 35% 65% 35% 65%;
-  animation: move5 13s ease-in-out infinite, morph5 7s ease-in-out infinite;
+  animation: move5 7.8s ease-in-out infinite, morph5 4.2s ease-in-out infinite;
 }
 
 @keyframes move1 {
   0%, 100% { translate: 0 0; }
-  33%       { translate: 220px 180px; }
-  66%       { translate: 60px 320px; }
+  33%       { translate: 120px -80px; }
+  66%       { translate: 60px 180px; }
 }
 @keyframes move2 {
   0%, 100% { translate: 0 0; }
-  33%       { translate: -180px 220px; }
-  66%       { translate: 120px -80px; }
+  33%       { translate: 80px -120px; }
+  66%       { translate: -60px 100px; }
 }
 @keyframes move3 {
   0%, 100% { translate: 0 0; }
-  33%       { translate: -240px 180px; }
-  66%       { translate: -80px 350px; }
+  33%       { translate: 100px 140px; }
+  66%       { translate: 60px -60px; }
 }
 @keyframes move4 {
   0%, 100% { translate: 0 0; }
-  33%       { translate: 180px -220px; }
-  66%       { translate: -80px -120px; }
+  33%       { translate: 140px 160px; }
+  66%       { translate: 80px -80px; }
 }
 @keyframes move5 {
   0%, 100% { translate: 0 0; }
-  33%       { translate: -200px -180px; }
-  66%       { translate: 120px -240px; }
+  33%       { translate: 120px -100px; }
+  66%       { translate: -60px 120px; }
 }
 
 @keyframes morph1 {
@@ -145,6 +133,7 @@
   z-index: 3;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
 /* Only the About page needs scrolling */

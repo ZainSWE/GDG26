@@ -687,7 +687,7 @@ export default function GraphExplorer({ jsonData = null }) {
               <div className="detail-card__body">
                 <div className="detail-section">
                   <h3>Summary</h3>
-                  <p>{activeConcept.summary || '—'}</p>
+                  <p>{(activeConcept.summary || '').replace(/\s*—\s*/g, ' ')}</p>
                 </div>
 
                 {conceptDetailExamples.length > 0 && (
