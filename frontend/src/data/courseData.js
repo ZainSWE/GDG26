@@ -255,31 +255,3 @@ export function normalizeCourseData(raw) {
   }
 }
 
-const courseLoaders = import.meta.glob('../../testing/*.json')
-
-export const courseSourceOptions = Object.keys(courseLoaders).map((path) => {
-  const fileName = path.split('/').pop() || path
-  return {
-    value: path,
-    label: fileName,
-  }
-})
-
-export function getDefaultCourseSource() {
-  return (
-    courseSourceOptions.find((option) => /2910summary/i.test(option.label))?.value ||
-    courseSourceOptions[0]?.value ||
-    ''
-  )
-}
-
-export async function loadCourseDataFromSource(sourcePath) {
-  const loader = courseLoaders[sourcePath]
-
-  if (!loader) {
-    throw new Error(`Unknown course source: ${sourcePath}`)
-  }
-
-  const module = await loader()
-  return normalizeCourseData(module.default ?? module)
-}

@@ -52,8 +52,17 @@
   width: 100%;
   border: 0;
   text-align: left;
-  cursor: default;
+  cursor: pointer;
   color: inherit;
+  font: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.nav-item:focus-visible,
+.nav-subitem:focus-visible {
+  outline: 2px solid #88c1ff;
+  outline-offset: 2px;
 }
 
 .nav-item {
@@ -90,41 +99,6 @@
 .nav-subitem.is-active {
   background: rgba(136, 193, 255, 0.18);
   color: #ffffff;
-}
-
-.source-switcher {
-  margin: 16px 0 10px;
-  padding: 12px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.05);
-  display: grid;
-  gap: 8px;
-}
-
-.source-switcher label {
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: #9ec5ff;
-}
-
-.source-switcher select {
-  width: 100%;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 12px;
-  background: rgba(9, 20, 41, 0.88);
-  color: #eef5ff;
-  padding: 10px 12px;
-  outline: none;
-}
-
-.source-switcher__status {
-  font-size: 0.84rem;
-  color: #c6daf8;
-}
-
-.source-switcher__status--error {
-  color: #ffb3b3;
 }
 
 .graph-workspace {

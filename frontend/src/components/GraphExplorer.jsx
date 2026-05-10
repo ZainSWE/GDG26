@@ -1,10 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import {
-  courseSourceOptions,
-  getDefaultCourseSource,
-  loadCourseDataFromSource,
-  normalizeCourseData,
-} from '../data/courseData'
+import { normalizeCourseData } from '../data/courseData'
 import './GraphExplorer.css'
 
 function toPoint(percentX, percentY) {
@@ -82,70 +77,20 @@ export default function GraphExplorer({ jsonData = null }) {
   const [activeUnitId, setActiveUnitId] = useState('')
   const [activeConceptId, setActiveConceptId] = useState('')
   const [courseData, setCourseData] = useState({ id: 'course', name: 'Course', units: [] })
-  const [sourcePath, setSourcePath] = useState(getDefaultCourseSource())
-  const [loadingSource, setLoadingSource] = useState(false)
-  const [sourceError, setSourceError] = useState('')
   const stageRef = useRef(null)
 
   const activeUnit = courseData.units.find((unit) => unit.id === activeUnitId) || courseData.units[0]
   const activeConcept = activeUnit?.concepts.find((concept) => concept.id === activeConceptId) || null
-
-  useEffect(() => {
-    if (!activeUnit && courseData.units[0]) {
-      setActiveUnitId(courseData.units[0].id)
-    }
-  }, [activeUnit])
-
-  useEffect(() => {
-    // when courseData changes, reset actives to the new data
-    if (courseData && courseData.units && courseData.units.length) {
-      setActiveUnitId(courseData.units[0].id)
-      setActiveConceptId('')
-    }
-  }, [courseData])
 
   // When a graph is passed in from the backend, use it directly
   useEffect(() => {
     if (jsonData) {
       setCourseData(normalizeCourseData(jsonData))
       setZoomLevel(0)
+      setActiveUnitId('')
+      setActiveConceptId('')
     }
   }, [jsonData])
-
-  useEffect(() => {
-    let cancelled = false
-
-    async function loadSource() {
-      // If data is being provided from the backend, skip local file loading
-      if (jsonData || !sourcePath) {
-        return
-      }
-
-      setLoadingSource(true)
-      setSourceError('')
-
-      try {
-        const nextCourse = await loadCourseDataFromSource(sourcePath)
-        if (!cancelled) {
-          setCourseData(nextCourse)
-        }
-      } catch (error) {
-        if (!cancelled) {
-          setSourceError(error instanceof Error ? error.message : 'Failed to load JSON source')
-        }
-      } finally {
-        if (!cancelled) {
-          setLoadingSource(false)
-        }
-      }
-    }
-
-    loadSource()
-
-    return () => {
-      cancelled = true
-    }
-  }, [sourcePath, jsonData])
 
   const unitLayouts = useMemo(
     () => (courseData.units || []).map((unit, index) => ({ unit, ...getUnitLayout(index) })),
@@ -209,7 +154,7 @@ export default function GraphExplorer({ jsonData = null }) {
         } else {
           return
         }
-      } catch (err) {
+      } catch {
         return
       }
     }
@@ -242,6 +187,7 @@ export default function GraphExplorer({ jsonData = null }) {
     if (zoomLevel === 1) {
       setZoomLevel(0)
       setActiveConceptId('')
+      setActiveUnitId('')
       return
     }
   }
@@ -273,45 +219,50 @@ export default function GraphExplorer({ jsonData = null }) {
           <p>One connected graph for units and concepts.</p>
         </div>
 
-        <div className="source-switcher">
-          <label htmlFor="course-source">Test JSON</label>
-          <select
-            id="course-source"
-            value={sourcePath}
-            onChange={(event) => setSourcePath(event.target.value)}
-          >
-            {courseSourceOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-          {loadingSource && <div className="source-switcher__status">Loading JSON...</div>}
-          {sourceError && <div className="source-switcher__status source-switcher__status--error">{sourceError}</div>}
-        </div>
-
-        <div className={`nav-item nav-item--root ${zoomLevel === 0 ? 'is-active' : ''}`}>
+        <button
+          type="button"
+          className={`nav-item nav-item--root ${zoomLevel === 0 ? 'is-active' : ''}`}
+          onClick={() => {
+            setZoomLevel(0)
+            setActiveUnitId('')
+            setActiveConceptId('')
+          }}
+        >
           Course Overview
-        </div>
+        </button>
 
         <div className="nav-group">
           {courseData.units.map((unit) => {
             const isSelected = unit.id === activeUnitId
             return (
               <div key={unit.id} className="nav-group__block">
-                <div className={`nav-item ${isSelected ? 'is-active' : ''}`}>
+                <button
+                  type="button"
+                  className={`nav-item ${isSelected && zoomLevel >= 1 ? 'is-active' : ''}`}
+                  onClick={() => {
+                    setActiveUnitId(unit.id)
+                    setActiveConceptId('')
+                    setZoomLevel(1)
+                  }}
+                >
                   {unit.name}
-                </div>
+                </button>
 
                 {isSelected && (
                   <div className="nav-subgroup">
                     {unit.concepts.map((concept) => (
-                      <div
+                      <button
+                        type="button"
                         key={concept.id}
                         className={`nav-subitem ${activeConceptId === concept.id ? 'is-active' : ''}`}
+                        onClick={() => {
+                          setActiveUnitId(unit.id)
+                          setActiveConceptId(concept.id)
+                          setZoomLevel(2)
+                        }}
                       >
                         {concept.name}
-                      </div>
+                      </button>
                     ))}
                   </div>
                 )}
