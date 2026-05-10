@@ -1,4 +1,4 @@
-// src/components/Navbar.jsx
+import { Link } from 'react-router-dom'
 import './Navbar.css'
 
 export default function Navbar() {
@@ -6,10 +6,10 @@ export default function Navbar() {
     <nav className="navbar">
       <h1 className="logo">MindMap</h1>
       <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">About</a></li>
+        <li><Link to="/">Home</Link></li>
+        <li><Link to="/about">About</Link></li>
         <li><a href="https://github.com/ZainSWE/GDG26" target="_blank">GitHub</a></li>
-        <li><a href="#">DevPost</a></li>
+        <li><Link to="#">DevPost</Link></li>
       </ul>
     </nav>
   )
