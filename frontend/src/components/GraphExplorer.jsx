@@ -1,10 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import {
-  courseSourceOptions,
-  getDefaultCourseSource,
-  loadCourseDataFromSource,
-  normalizeCourseData,
-} from '../data/courseData'
+import { normalizeCourseData } from '../data/courseData'
 import './GraphExplorer.css'
 
 const UNIT_COLORS = ['#a78bfa', '#22d3ee', '#fb923c', '#4ade80']
@@ -99,9 +94,6 @@ export default function GraphExplorer({ jsonData = null }) {
   const [activeUnitId, setActiveUnitId]     = useState('')
   const [activeConceptId, setActiveConceptId] = useState('')
   const [courseData, setCourseData]         = useState({ id: 'course', name: 'Course', units: [] })
-  const [sourcePath, setSourcePath]         = useState(getDefaultCourseSource())
-  const [loadingSource, setLoadingSource]   = useState(false)
-  const [sourceError, setSourceError]       = useState('')
   const [nodeOffsets, setNodeOffsets]       = useState({})   // id → {dx, dy}
   const [zoomAnim, setZoomAnim]             = useState(null) // 'in' | 'out' | null
 
@@ -127,24 +119,6 @@ export default function GraphExplorer({ jsonData = null }) {
   useEffect(() => {
     if (jsonData) { setCourseData(normalizeCourseData(jsonData)); setZoomLevel(0) }
   }, [jsonData])
-
-  useEffect(() => {
-    let cancelled = false
-    async function load() {
-      if (jsonData || !sourcePath) return
-      setLoadingSource(true); setSourceError('')
-      try {
-        const next = await loadCourseDataFromSource(sourcePath)
-        if (!cancelled) setCourseData(next)
-      } catch (err) {
-        if (!cancelled) setSourceError(err instanceof Error ? err.message : 'Failed to load')
-      } finally {
-        if (!cancelled) setLoadingSource(false)
-      }
-    }
-    load()
-    return () => { cancelled = true }
-  }, [sourcePath, jsonData])
 
   // ── Layouts ─────────────────────────────────────────────────────────────────
 
@@ -362,17 +336,6 @@ export default function GraphExplorer({ jsonData = null }) {
           <div className="side-nav__eyebrow">CIS 2910</div>
           <h1>{courseData.name}</h1>
           <p>One connected graph for units and concepts.</p>
-        </div>
-
-        <div className="source-switcher">
-          <label htmlFor="course-source">Data source</label>
-          <select id="course-source" value={sourcePath} onChange={(e) => setSourcePath(e.target.value)}>
-            {courseSourceOptions.map((opt) => (
-              <option key={opt.value} value={opt.value}>{opt.label}</option>
-            ))}
-          </select>
-          {loadingSource && <div className="source-switcher__status">Loading…</div>}
-          {sourceError && <div className="source-switcher__status source-switcher__status--error">{sourceError}</div>}
         </div>
 
         <button
