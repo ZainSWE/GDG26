@@ -11,6 +11,16 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 app.use(express.json());
+app.use((_, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type");
+  next();
+});
+
+app.options("*", (_req, res) => {
+  res.sendStatus(204);
+});
 
 // TODO: set up mongoose connection using process.env.MONGODB_URI
 // mongoose.connect(process.env.MONGODB_URI)
@@ -39,15 +49,14 @@ app.post("/generate", async (req, res) => {
     return res.status(400).json({ message: "notes is required and must be a string" });
   }
 
-  // TODO:
-  // 1) send notes to OpenAI
-  // 2) parse AI JSON response
-  // 3) validate with graphSchema
-  // 4) save to MongoDB
-  // 5) return graph JSON
-
-  return res.status(501).json({
-    message: "Skeleton ready. /generate implementation is intentionally pending.",
+  return res.status(200).json({
+    success: true,
+    message: "Input received by backend",
+    received: {
+      notes,
+      length: notes.length,
+      timestamp: new Date().toISOString(),
+    },
   });
 });
 
