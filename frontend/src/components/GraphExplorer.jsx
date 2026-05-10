@@ -32,6 +32,18 @@ function getCenteredPoint() {
   return toPoint(50, 50)
 }
 
+function examplesNotAlreadyInSummary(summary, examples) {
+  const s = (summary || '').trim()
+  const lower = s.toLowerCase()
+  return (examples || []).filter((ex) => {
+    const t = (typeof ex === 'string' ? ex : '').trim()
+    if (!t) return false
+    if (t === s) return false
+    if (lower.includes(t.toLowerCase())) return false
+    return true
+  })
+}
+
 function shouldHideNode(type, zoomLevel, isActive) {
   if (zoomLevel === 0) {
     return type === 'concept'
@@ -81,6 +93,14 @@ export default function GraphExplorer({ jsonData = null }) {
 
   const activeUnit = courseData.units.find((unit) => unit.id === activeUnitId) || courseData.units[0]
   const activeConcept = activeUnit?.concepts.find((concept) => concept.id === activeConceptId) || null
+
+  const conceptDetailExamples = useMemo(
+    () =>
+      activeConcept
+        ? examplesNotAlreadyInSummary(activeConcept.summary, activeConcept.examples)
+        : [],
+    [activeConcept],
+  )
 
   // When a graph is passed in from the backend, use it directly
   useEffect(() => {
@@ -374,23 +394,21 @@ export default function GraphExplorer({ jsonData = null }) {
 
               <div className="detail-section">
                 <h3>Summary</h3>
-                <p>{activeConcept.summary}</p>
+                <p>{activeConcept.summary || '—'}</p>
               </div>
 
-              <div className="detail-section">
-                <h3>Examples / Formulas</h3>
-                <ul>
-                  {(activeConcept.examples?.length ? activeConcept.examples : [activeConcept.summary]).map(
-                    (example, index) => (
+              {conceptDetailExamples.length > 0 && (
+                <div className="detail-section">
+                  <h3>Examples / Formulas</h3>
+                  <ul>
+                    {conceptDetailExamples.map((example, index) => (
                       <li key={`${example}-${index}`}>{example}</li>
-                    ),
-                  )}
-                </ul>
-              </div>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
               <div className="detail-section">
-                <h3>More</h3>
-                <p>{activeConcept.additional.unitContext}</p>
                 <p className="detail-card__meta">Importance {activeConcept.importance}/5</p>
               </div>
 
