@@ -1,12 +1,31 @@
 import { useState } from 'react'
-import graphData from '../../testing/MATH2130_graph.json'
 import './TextInput.css'
+
+const BACKEND_URL = 'http://localhost:4000'
 
 export default function TextInput({ onSubmit }) {
   const [text, setText] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
-  const handleSubmit = () => {
-    onSubmit(graphData)
+  const handleSubmit = async () => {
+    if (!text.trim()) return
+    setLoading(true)
+    setError('')
+    try {
+      const res = await fetch(`${BACKEND_URL}/generate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ notes: text }),
+      })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json.message || 'Backend error')
+      onSubmit(json.data.graph)
+    } catch (err) {
+      setError(err.message || 'Failed to reach backend')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -20,8 +39,9 @@ export default function TextInput({ onSubmit }) {
         onChange={e => setText(e.target.value)}
         rows={8}
       />
-      <button className="input-btn" onClick={handleSubmit}>
-        Generate Graph
+      {error && <p style={{ color: '#ff6b6b', fontSize: '14px', margin: 0 }}>{error}</p>}
+      <button className="input-btn" onClick={handleSubmit} disabled={loading}>
+        {loading ? 'Generating…' : 'Generate Graph'}
       </button>
     </div>
   )

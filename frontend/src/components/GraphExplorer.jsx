@@ -116,7 +116,8 @@ export default function GraphExplorer({ jsonData = null }) {
     let cancelled = false
 
     async function loadSource() {
-      if (!sourcePath) {
+      // If data is being provided from the backend, skip local file loading
+      if (jsonData || !sourcePath) {
         return
       }
 
@@ -144,7 +145,7 @@ export default function GraphExplorer({ jsonData = null }) {
     return () => {
       cancelled = true
     }
-  }, [sourcePath])
+  }, [sourcePath, jsonData])
 
   const unitLayouts = useMemo(
     () => (courseData.units || []).map((unit, index) => ({ unit, ...getUnitLayout(index) })),
