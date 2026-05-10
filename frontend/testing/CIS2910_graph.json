@@ -1,0 +1,207 @@
+{
+"nodes": [
+{
+"id": "root",
+"title": "CIS 2910 Review: Sets, Functions, and Proofs",
+"content": "A comprehensive review covering the fundamental mathematical structures of sets and functions, alongside formal proof techniques and best practices.",
+"connected": ["unit1", "unit2", "unit3", "unit4", "unit5"],
+"importance": 5
+},
+{
+"id": "unit1",
+"title": "Set Theory Basics",
+"content": "Foundational concepts regarding collections of objects, their notations, and basic properties.",
+"connected": ["n1", "n2", "n3", "n4", "n5", "n6", "n7"],
+"importance": 4
+},
+{
+"id": "n1",
+"title": "Set and Element",
+"content": "A set is a collection of objects; each object is an element. Denoted by roster notation {a, b} or set-builder notation.",
+"connected": ["unit1", "n2"],
+"importance": 3
+},
+{
+"id": "n2",
+"title": "Cardinality",
+"content": "The number of distinct elements in a finite set A, denoted by |A|.",
+"connected": ["n1", "n3"],
+"importance": 3
+},
+{
+"id": "n3",
+"title": "Finite vs. Infinite Sets",
+"content": "A finite set is empty or has n elements; an infinite set is not finite.",
+"connected": ["n2"],
+"importance": 2
+},
+{
+"id": "n4",
+"title": "Common Numerical Sets",
+"content": "Includes Natural numbers (N), Integers (Z), Rational numbers (Q), and Real numbers (R).",
+"connected": ["unit1", "n10"],
+"importance": 3
+},
+{
+"id": "n5",
+"title": "Subset & Proper Subset",
+"content": "A is a subset of B (A ⊆ B) if every element of A is in B. It is a proper subset (A ⊂ B) if A ⊆ B and A ≠ B.",
+"connected": ["unit1", "n6"],
+"importance": 3
+},
+{
+"id": "n6",
+"title": "Power Set",
+"content": "The set of all subsets of a set A, denoted P(A). For a set with n elements, |P(A)| = 2^n.",
+"connected": ["n5", "n2"],
+"importance": 3
+},
+{
+"id": "n7",
+"title": "Set Operations",
+"content": "Union (A ∪ B) contains elements in A OR B. Intersection (A ∩ B) contains elements in A AND B.",
+"connected": ["unit1"],
+"importance": 3
+},
+{
+"id": "unit2",
+"title": "Functions",
+"content": "Mathematical mappings between sets and the rules governing them.",
+"connected": ["n8", "n9", "n11", "n12"],
+"importance": 4
+},
+{
+"id": "n8",
+"title": "Function Definition",
+"content": "A mapping f: X → Y where every x in domain X relates to exactly one y in target Y.",
+"connected": ["unit2", "n9"],
+"importance": 3
+},
+{
+"id": "n9",
+"title": "Domain, Target, and Range",
+"content": "Domain (X) is the input set; Target/Co-domain (Y) is the potential output set; Range is the actual set of outputs.",
+"connected": ["n8"],
+"importance": 3
+},
+{
+"id": "n11",
+"title": "Well-defined Function",
+"content": "A function is well-defined if it maps each domain element to exactly one target element.",
+"connected": ["n8"],
+"importance": 2
+},
+{
+"id": "n12",
+"title": "Function Equality",
+"content": "Two functions are equal if they share the same domain, target, and f(x) = g(x) for all x.",
+"connected": ["n8"],
+"importance": 2
+},
+{
+"id": "unit3",
+"title": "Mathematical Definitions",
+"content": "Key terms and properties used as the basis for proofs.",
+"connected": ["n13", "n14", "n15", "n16"],
+"importance": 4
+},
+{
+"id": "n13",
+"title": "Parity",
+"content": "An integer is even if x = 2k, and odd if x = 2k + 1 for some integer k.",
+"connected": ["unit3"],
+"importance": 3
+},
+{
+"id": "n14",
+"title": "Rational Numbers",
+"content": "A number r is rational if it can be expressed as x/y where x, y are integers and y ≠ 0.",
+"connected": ["n4", "unit3"],
+"importance": 3
+},
+{
+"id": "n15",
+"title": "Divisibility",
+"content": "x divides y if y = kx for some integer k. x is a factor/divisor; y is a multiple.",
+"connected": ["unit3", "n16"],
+"importance": 3
+},
+{
+"id": "n16",
+"title": "Prime and Composite",
+"content": "Prime: n > 1 divisible only by 1 and n. Composite: n > 1 with a divisor m such that 1 < m < n.",
+"connected": ["n15"],
+"importance": 3
+},
+{
+"id": "unit4",
+"title": "Proof Techniques",
+"content": "Methods used to demonstrate the truth of mathematical statements.",
+"connected": ["n17", "n18", "n19", "n20", "n21"],
+"importance": 4
+},
+{
+"id": "n17",
+"title": "Theorem and Proof",
+"content": "A theorem is a provable statement; a proof is a logical sequence of steps from axioms to conclusion.",
+"connected": ["unit4"],
+"importance": 3
+},
+{
+"id": "n18",
+"title": "Proof by Exhaustion",
+"content": "Proving a universal statement by checking every element in a small domain individually.",
+"connected": ["unit4"],
+"importance": 2
+},
+{
+"id": "n19",
+"title": "Universal Generalization",
+"content": "Proving a statement for an 'arbitrary' object in the domain to prove it for all objects.",
+"connected": ["unit4"],
+"importance": 3
+},
+{
+"id": "n20",
+"title": "Existence Proofs",
+"content": "Constructive: provides a specific example. Nonconstructive: proves existence without an example.",
+"connected": ["unit4"],
+"importance": 3
+},
+{
+"id": "n21",
+"title": "Counterexample",
+"content": "An assignment of values that proves a universal statement is false.",
+"connected": ["n19", "unit4"],
+"importance": 3
+},
+{
+"id": "unit5",
+"title": "Best Practices and Errors",
+"content": "Guidelines for writing clear proofs and avoiding logical fallacies.",
+"connected": ["n22", "n23", "n24"],
+"importance": 4
+},
+{
+"id": "n22",
+"title": "Existential Instantiation",
+"content": "Logic law: if an object exists, it can be named as long as the name is not already in use.",
+"connected": ["n20", "unit5"],
+"importance": 2
+},
+{
+"id": "n23",
+"title": "Common Proof Mistakes",
+"content": "Includes generalizing from examples, skipping steps, circular reasoning, and assuming unproven facts.",
+"connected": ["unit5"],
+"importance": 3
+},
+{
+"id": "n24",
+"title": "Proof Writing Best Practices",
+"content": "Use allowed assumptions, clear keywords, and follow a logical flow from hypothesis to conclusion.",
+"connected": ["unit5", "n17"],
+"importance": 2
+}
+]
+}
