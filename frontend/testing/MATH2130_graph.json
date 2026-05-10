@@ -1,0 +1,378 @@
+{
+  "graph": {
+    "title": "MATH*2130 Numerical Methods — Knowledge Graph",
+    "description": "Each node is a self-contained concept chunk. Edges indicate conceptual relationships (shared theory, dependency, or category).",
+    "nodes": [
+      {
+        "id": "C01",
+        "label": "Absolute Error",
+        "category": "Error Analysis",
+        "content": "The absolute error between a true value p and an approximation p* is |p − p*|. It gives the raw magnitude of the difference between the two values, regardless of scale.",
+        "connections": ["C02", "C03", "C04", "C05"]
+      },
+      {
+        "id": "C02",
+        "label": "Relative Error",
+        "category": "Error Analysis",
+        "content": "Relative error is |p − p*| / |p|. It scales the difference by the true value, making it meaningful when comparing errors in very large or very small numbers. It is undefined when p = 0.",
+        "connections": ["C01", "C03", "C04", "C05"]
+      },
+      {
+        "id": "C03",
+        "label": "Absolute Error Lemma",
+        "category": "Error Analysis",
+        "content": "If |p − p*| < (1/2) × 10^(−n), then p and p* agree when rounded or chopped to n decimal places. This ties absolute error bounds to digit-level precision.",
+        "connections": ["C01", "C04", "C05", "C06"]
+      },
+      {
+        "id": "C04",
+        "label": "Relative Error Lemma",
+        "category": "Error Analysis",
+        "content": "If |p − p*| / |p| < (1/2) × 10^(−n), then p and p* share n significant digits. This is used to define stopping criteria for iterative methods: stop when the approximate relative error |(xₙ − xₙ₋₁)/xₙ| < 0.5 × 10^(−p) to guarantee p converged significant digits.",
+        "connections": ["C02", "C03", "C05", "C16"]
+      },
+      {
+        "id": "C05",
+        "label": "Floating Point Representation",
+        "category": "Floating Point Math",
+        "content": "A decimal floating point number is stored as fl(x) = ±0.d₁d₂…dₙ × 10^p, where d₁ ≠ 0 (normalized mantissa). The string .d₁…dₙ is the mantissa; n determines precision. Computers use base-2 forms internally.",
+        "connections": ["C01", "C02", "C06", "C07"]
+      },
+      {
+        "id": "C06",
+        "label": "Chopping vs Rounding",
+        "category": "Floating Point Math",
+        "content": "Chopping truncates after n digits: absolute error < 10^(−n+p), relative error < 10^(−n+1). Rounding halves those bounds: absolute error ≤ (1/2)×10^(−n+p), relative error ≤ (1/2)×10^(−n+1). Rounding is more accurate; chopping is computationally cheaper.",
+        "connections": ["C05", "C07", "C03", "C04"]
+      },
+      {
+        "id": "C07",
+        "label": "Double Precision in MATLAB",
+        "category": "Floating Point Math",
+        "content": "64-bit format: 1 sign bit, 11 exponent bits, 52 mantissa bits. Relative error ≤ 2^(−52) ≈ 2.2×10^(−16), guaranteeing approximately 15 correct significant decimal digits. Never expect more than 15 significant digits from MATLAB double precision.",
+        "connections": ["C05", "C06"]
+      },
+      {
+        "id": "C08",
+        "label": "Intermediate Value Theorem (IVT)",
+        "category": "Calculus Background",
+        "content": "If f is continuous on [a, b] and f(a) ≠ f(b), then for any k strictly between f(a) and f(b), there exists c ∈ (a, b) with f(c) = k. This guarantees the existence of a root whenever f(a) and f(b) have opposite signs.",
+        "connections": ["C09", "C12", "C13"]
+      },
+      {
+        "id": "C09",
+        "label": "Mean Value Theorem (MVT)",
+        "category": "Calculus Background",
+        "content": "If f is continuous on [a, b] and differentiable on (a, b), then there exists c ∈ (a, b) such that f'(c) = (f(b) − f(a)) / (b − a). Fundamental for deriving error terms in numerical approximations (e.g., Riemann sum error, Taylor remainder).",
+        "connections": ["C08", "C10", "C11", "C40"]
+      },
+      {
+        "id": "C10",
+        "label": "Taylor's Theorem",
+        "category": "Calculus Background",
+        "content": "For f infinitely differentiable at x₀: f(x) = Σᵢ₌₀ⁿ [f⁽ⁱ⁾(x₀)/i!](x−x₀)ⁱ + Rₙ(x), where Rₙ(x) = f⁽ⁿ⁺¹⁾(c)/(n+1)! × (x−x₀)^(n+1) for some c between x₀ and x. The most important theorem of the course; used to derive all finite difference formulas and error bounds. In terms of h = x−x₀: f(x₀+h) = Σ f⁽ⁱ⁾(x₀)/i! × hⁱ + O(h^(n+1)).",
+        "connections": ["C09", "C11", "C14", "C44", "C49", "C50", "C51", "C52"]
+      },
+      {
+        "id": "C11",
+        "label": "Big-O Notation",
+        "category": "Asymptotic Analysis",
+        "content": "f ∈ O(g) as n→∞ means |f(n)| ≤ k|g(n)| for all large n and some constant k>0. Equivalently, lim f/g is a finite constant. Also applies as h→0: f(h) ∈ O(g(h)) if |f(h)| ≤ k|g(h)| for small h. Used to characterize how errors grow or shrink with the relevant parameter. Little-o: if lim f/g = 0, f ∈ o(g) ⊂ O(g).",
+        "connections": ["C10", "C14", "C40", "C41", "C42", "C49", "C50", "C51", "C52"]
+      },
+      {
+        "id": "C12",
+        "label": "IVT Applied to Root-Finding",
+        "category": "Root Finding",
+        "content": "If f(a) and f(b) have opposite signs and f is continuous, then IVT guarantees a root in (a, b). This is the theoretical foundation for bisection and false position methods, which maintain a 'bracketing' interval at every step.",
+        "connections": ["C08", "C13", "C22", "C25"]
+      },
+      {
+        "id": "C13",
+        "label": "Definition of a Root",
+        "category": "Root Finding",
+        "content": "A root (or zero) of f is a value r where f(r) = 0. Any equation f(x) = g(x) can be rewritten as finding a root of h(x) = f(x) − g(x) = 0. Root-finding underpins both root-finding algorithms and optimization methods.",
+        "connections": ["C12", "C22", "C25", "C27", "C29", "C31"]
+      },
+      {
+        "id": "C14",
+        "label": "Taylor Remainder and Error Bounding",
+        "category": "Asymptotic Analysis",
+        "content": "The remainder Rₙ(x) = f⁽ⁿ⁺¹⁾(c)/(n+1)! × (x−x₀)^(n+1) is O((x−x₀)^(n+1)). To bound the error: find the maximum of |f⁽ⁿ⁺¹⁾| on the interval and bound |x−x₀|. This is the standard technique for proving error bounds throughout the course.",
+        "connections": ["C10", "C11", "C40", "C41", "C42", "C44"]
+      },
+      {
+        "id": "C15",
+        "label": "Order of Convergence",
+        "category": "Convergence Theory",
+        "content": "A sequence {xₖ} converges to x* with order p if |xₖ − x*| ≈ λ|xₖ₋₁ − x*|^p for a finite nonzero constant λ (asymptotic error constant). p=1 is linear convergence; p=2 is quadratic convergence. Higher p means faster convergence. λ (smaller = slightly faster) matters less than p.",
+        "connections": ["C16", "C23", "C26", "C28", "C30"]
+      },
+      {
+        "id": "C16",
+        "label": "Stopping Criteria for Iterative Methods",
+        "category": "Convergence Theory",
+        "content": "For bisection: stop when (1/2^(n+1))|b₀−a₀| < err (a priori bound). For other iterative methods (no a priori bound): stop when the approximate relative error |(xₙ − xₙ₋₁)/xₙ| < 0.5 × 10^(−p), which by the Relative Error Lemma guarantees p converged significant digits.",
+        "connections": ["C04", "C15", "C22", "C25", "C27", "C29"]
+      },
+      {
+        "id": "C22",
+        "label": "Bisection Method",
+        "category": "Root Finding",
+        "content": "Requires f continuous on [a, b] with f(a)·f(b) < 0 (opposite signs). Algorithm: repeatedly halve the interval by evaluating f at the midpoint c = (a+b)/2, then keep the half that still brackets the root. Error bound: |cₙ − r| ≤ (b₀−a₀)/2^(n+1). Simple, always works, but slow.",
+        "connections": ["C12", "C13", "C15", "C16", "C23", "C25"]
+      },
+      {
+        "id": "C23",
+        "label": "Bisection: Linear Convergence",
+        "category": "Convergence Theory",
+        "content": "The bisection method halves the error with each iteration, giving |xₖ−x*|/|xₖ₋₁−x*| ≈ 1/2. This is linear convergence (order p = 1) with asymptotic error constant λ ≈ 1/2. It is the slowest of the four root-finding methods covered.",
+        "connections": ["C15", "C22", "C26", "C28", "C30"]
+      },
+      {
+        "id": "C25",
+        "label": "Method of False Position (Regula Falsi)",
+        "category": "Root Finding",
+        "content": "Like bisection but replaces the midpoint with the x-intercept of the secant line through (a, f(a)) and (b, f(b)): c = b − f(b)(b−a)/(f(b)−f(a)). Still maintains a bracketing interval (IVT-based). Typically converges faster than bisection but has no a priori error bound.",
+        "connections": ["C12", "C13", "C16", "C22", "C26", "C27"]
+      },
+      {
+        "id": "C26",
+        "label": "False Position: Linear Convergence",
+        "category": "Convergence Theory",
+        "content": "Method of False Position also converges linearly (order p = 1), potentially with a smaller asymptotic error constant λ than bisection, meaning it can reach a result in fewer steps but is not guaranteed to. No a priori error formula like bisection's (1/2^(n+1))|b₀−a₀|.",
+        "connections": ["C15", "C23", "C25", "C28"]
+      },
+      {
+        "id": "C27",
+        "label": "Secant Method",
+        "category": "Root Finding",
+        "content": "Uses two consecutive estimates without a bracketing interval: xₖ₊₁ = xₖ − f(xₖ)(xₖ−xₖ₋₁)/(f(xₖ)−f(xₖ₋₁)). Same formula as false position but without maintaining a bracket. Convergence is NOT guaranteed in general. Easier to code than Newton since no derivative needed.",
+        "connections": ["C13", "C25", "C16", "C28", "C29"]
+      },
+      {
+        "id": "C28",
+        "label": "Secant Method: Superlinear Convergence",
+        "category": "Convergence Theory",
+        "content": "Secant method converges at order p = (1+√5)/2 ≈ 1.618 (the golden ratio) — superlinear but slower than quadratic. Convergence guaranteed if f, f', f'' are continuous near the root x*; f'(x*) ≠ 0; and starting estimates x₀, x₁ are sufficiently close to x*.",
+        "connections": ["C15", "C26", "C27", "C30"]
+      },
+      {
+        "id": "C29",
+        "label": "Newton's Method (Root-Finding)",
+        "category": "Root Finding",
+        "content": "Uses the tangent line at each iterate: xₙ₊₁ = xₙ − f(xₙ)/f'(xₙ). Requires only one initial guess. Needs the derivative f'. Fails if f'(xₙ) = 0 at any stage (horizontal tangent) or if the initial guess is far from the root. Most efficient root-finder under good conditions.",
+        "connections": ["C13", "C27", "C16", "C30", "C31"]
+      },
+      {
+        "id": "C30",
+        "label": "Newton's Method: Quadratic Convergence",
+        "category": "Convergence Theory",
+        "content": "For simple roots (f'(x*) ≠ 0), Newton's method converges quadratically (order p = 2). The error roughly squares each iteration — extremely fast near the root. Conditions: f, f', f'' continuous near x*; f'(x*) ≠ 0; x₀ sufficiently close to x*. Only applies to simple (non-repeated) roots.",
+        "connections": ["C15", "C28", "C29", "C31"]
+      },
+      {
+        "id": "C31",
+        "label": "Newton's Method for Optimization",
+        "category": "Optimization",
+        "content": "To find extrema of f(x), find roots of f'(x) = 0. Apply Newton's method to f' instead of f: xₙ₊₁ = xₙ − f'(xₙ)/f''(xₙ). This requires computing both first and second derivatives of the objective function.",
+        "connections": ["C13", "C29", "C30", "C32"]
+      },
+      {
+        "id": "C32",
+        "label": "Gradient Descent (1D)",
+        "category": "Optimization",
+        "content": "To minimize f(x): start at p₀ with stepsize h. If f'(p₀) < 0, step forward by h; if f'(p₀) > 0, step backward by h. Accept the step if f improves; otherwise, shrink h (e.g., halve it) and retry. Continue until h < tolerance. Finds local minima near the starting estimate.",
+        "connections": ["C31", "C33", "C34"]
+      },
+      {
+        "id": "C33",
+        "label": "Gradient of a Multivariable Function",
+        "category": "Optimization",
+        "content": "∇f(x₁,…,xₙ) = (∂f/∂x₁, …, ∂f/∂xₙ). A nonzero gradient vector points in the direction of steepest ascent. The gradient is zero at potential critical points (minima, maxima, saddle points). Division by its magnitude gives the unit vector of steepest ascent/descent.",
+        "connections": ["C32", "C34"]
+      },
+      {
+        "id": "C34",
+        "label": "Gradient Descent (Multi-D)",
+        "category": "Optimization",
+        "content": "Start at p̃₀. New test point: p̃₀ − h × ∇f(p̃₀)/‖∇f(p̃₀)‖ (step of size h in direction of steepest descent using a unit vector). If f improves, accept; otherwise shrink h. Repeat until h < tolerance. Only finds local minima; global minimum is not guaranteed. Can be extended to any number of variables.",
+        "connections": ["C32", "C33"]
+      },
+      {
+        "id": "C35",
+        "label": "Newton Interpolating Polynomial",
+        "category": "Polynomial Interpolation",
+        "content": "Given n distinct points (x₁,y₁),…,(xₙ,yₙ), there is a unique interpolating polynomial of degree ≤ n−1. Newton form: P(x) = a₁ + a₂(x−x₁) + a₃(x−x₁)(x−x₂) + … + aₙ(x−x₁)⋯(x−xₙ₋₁). Coefficients aₖ = f[x₁, xₖ] (divided differences). Useful for adding new points incrementally.",
+        "connections": ["C36", "C37"]
+      },
+      {
+        "id": "C36",
+        "label": "Divided Differences",
+        "category": "Polynomial Interpolation",
+        "content": "1st divided difference: f[xᵢ, xᵢ₊₁] = (yᵢ₊₁ − yᵢ)/(xᵢ₊₁ − xᵢ). kth divided difference: f[xᵢ, xᵢ₊ₖ] = (f[xᵢ₊₁, xᵢ₊ₖ] − f[xᵢ, xᵢ₊ₖ₋₁])/(xᵢ₊ₖ − xᵢ). The kth Newton coefficient: aₖ = f[x₁, xₖ]. Built iteratively via a divided difference table (triangular structure).",
+        "connections": ["C35", "C37"]
+      },
+      {
+        "id": "C37",
+        "label": "Newton vs Lagrange Interpolants",
+        "category": "Polynomial Interpolation",
+        "content": "The Newton and Lagrange forms of the interpolating polynomial are always identical polynomials — just written differently. The Newton form is often preferred computationally because it builds incrementally: adding a new point only requires computing one new divided difference and one new term.",
+        "connections": ["C35", "C36"]
+      },
+      {
+        "id": "C38",
+        "label": "Special Functions and Numerical Integration",
+        "category": "Numerical Integration",
+        "content": "Some integrands (e.g., e^(−x²), sin(x)/x) have no closed-form antiderivative. Such functions are called 'special functions.' Even without an antiderivative, their integrals can be approximated numerically to arbitrary precision using quadrature methods.",
+        "connections": ["C39", "C40", "C41", "C42"]
+      },
+      {
+        "id": "C39",
+        "label": "Error Function (erf)",
+        "category": "Numerical Integration",
+        "content": "erf(x) = (2/√π) ∫₀ˣ e^(−t²) dt. Key properties: erf'(x) = (2/√π)e^(−x²); odd function so erf(−x) = −erf(x); erf(0) = 0; lim_{x→±∞} erf(x) = ±1. Widely used in statistics (cumulative probability). Has a Taylor series derivable from the series for e^(−t²).",
+        "connections": ["C38", "C40"]
+      },
+      {
+        "id": "C40",
+        "label": "Riemann Sums",
+        "category": "Numerical Integration",
+        "content": "Approximate ∫ₐᵇ f(x) dx ≈ Σ f(xᵢ)hᵢ using n rectangles with heights f(xᵢ) and widths hᵢ. For a uniform partition with right endpoints: error ≤ M(b−a)²/(2n) where M = max|f'(x)| on [a,b]. Error is O(h) as h=(b−a)/n → 0.",
+        "connections": ["C09", "C11", "C14", "C38", "C39", "C41", "C42"]
+      },
+      {
+        "id": "C41",
+        "label": "Trapezoid Rule",
+        "category": "Numerical Integration",
+        "content": "Uses trapezoids instead of rectangles: ∫ₐᵇ f dx ≈ h/2 [f(x₀) + 2f(x₁) + … + 2f(xₙ₋₁) + f(xₙ)]. Interior nodes are counted twice; endpoints once. Error ≤ M(b−a)³/(12n²) where M = max|f''(x)|. Error is O(h²) — one order better than Riemann sums.",
+        "connections": ["C11", "C14", "C38", "C40", "C42"]
+      },
+      {
+        "id": "C42",
+        "label": "Simpson's Rule",
+        "category": "Numerical Integration",
+        "content": "Fits a quadratic through every three consecutive nodes. Formula: I ≈ h/3 [f(x₀) + 4f(x₁) + 2f(x₂) + 4f(x₃) + … + 4f(xₙ₋₁) + f(xₙ)]. Pattern: 1,4,2,4,2,…,2,4,1. Requires even number of subintervals (odd number of nodes). Error is O(h⁴) — dramatically faster convergence than trapezoid.",
+        "connections": ["C11", "C14", "C38", "C40", "C41"]
+      },
+      {
+        "id": "C43",
+        "label": "Initial Value Problem (IVP)",
+        "category": "Differential Equations",
+        "content": "A first-order differential equation y' = f(t, y) paired with an initial condition y(t₀) = y₀. The initial condition selects a unique solution from infinitely many. Numerical methods approximate this solution at discrete time steps (mesh points) rather than finding a closed-form function.",
+        "connections": ["C44", "C45", "C46", "C47", "C48"]
+      },
+      {
+        "id": "C44",
+        "label": "Euler's Method",
+        "category": "Differential Equations",
+        "content": "Simplest IVP solver. Formula: yᵢ₊₁ = yᵢ + h·f(tᵢ, yᵢ), tᵢ₊₁ = tᵢ + h. Walks along the tangent line at each mesh point. Local truncation error O(h²); global error O(h). Error accumulates quickly over many steps; use small h. Based directly on the first-order Taylor approximation.",
+        "connections": ["C10", "C43", "C45", "C46", "C48"]
+      },
+      {
+        "id": "C45",
+        "label": "Midpoint Method (RK2)",
+        "category": "Differential Equations",
+        "content": "Two-stage Runge-Kutta method. k₁ = f(tᵢ, yᵢ) — slope at start. k₂ = f(tᵢ + h/2, yᵢ + h/2·k₁) — slope at predicted midpoint. yᵢ₊₁ = yᵢ + h·k₂. More accurate than Euler's method. Uses Euler's step as a predictor and then corrects with the midpoint slope.",
+        "connections": ["C43", "C44", "C46", "C47", "C48"]
+      },
+      {
+        "id": "C46",
+        "label": "RK4 (Classical Runge-Kutta)",
+        "category": "Differential Equations",
+        "content": "Four-stage method: k₁=h·f(tᵢ,yᵢ); k₂=h·f(tᵢ+h/2, yᵢ+k₁/2); k₃=h·f(tᵢ+h/2, yᵢ+k₂/2); k₄=h·f(tᵢ+h, yᵢ+k₃). Update: yᵢ₊₁ = yᵢ + (k₁/6 + k₂/3 + k₃/3 + k₄/6). Weighted average favors the two middle slopes. Excellent accuracy; the standard practical method for IVPs.",
+        "connections": ["C43", "C44", "C45", "C47", "C48"]
+      },
+      {
+        "id": "C47",
+        "label": "Butcher Tableaus",
+        "category": "Differential Equations",
+        "content": "Compact notation for any Runge-Kutta scheme. A tableau has rows for each stage kᵢ: the left column gives the time offset (cᵢ·h), and the right columns give the weights for previous k-values. The bottom row gives the final weights (bᵢ) for Φ. Consistency requirement: each row's right-side values sum to the left value; bottom row values sum to 1.",
+        "connections": ["C45", "C46", "C48"]
+      },
+      {
+        "id": "C48",
+        "label": "General Runge-Kutta Concept",
+        "category": "Differential Equations",
+        "content": "Runge-Kutta methods compute weighted averages of slopes (k-values) at various sub-points within [tᵢ, tᵢ+h], producing better approximations than Euler's method. More stages generally give more accuracy at higher computational cost. Named after Carl Runge and Wilhelm Kutta (~1900). The specific combination is encoded in a Butcher Tableau.",
+        "connections": ["C43", "C44", "C45", "C46", "C47"]
+      },
+      {
+        "id": "C49",
+        "label": "Forward Difference Approximation",
+        "category": "Finite Differences",
+        "content": "f'(x₀) ≈ [f(x₀+h) − f(x₀)] / h. Derived from Taylor's theorem by substituting x = x₀+h and solving for f'(x₀). Error is O(h): the formula is exact minus an O(h) term involving f''(c). Most useful when x₀−h is outside the domain.",
+        "connections": ["C10", "C11", "C50", "C51", "C52"]
+      },
+      {
+        "id": "C50",
+        "label": "Backward Difference Approximation",
+        "category": "Finite Differences",
+        "content": "f'(x₀) ≈ [f(x₀) − f(x₀−h)] / h. Derived from Taylor's theorem by substituting x = x₀−h. Error is O(h). Useful when x₀+h is outside the domain (e.g., at the right boundary of a dataset).",
+        "connections": ["C10", "C11", "C49", "C51", "C52"]
+      },
+      {
+        "id": "C51",
+        "label": "Centered Difference Approximation",
+        "category": "Finite Differences",
+        "content": "f'(x₀) ≈ [f(x₀+h) − f(x₀−h)] / (2h). Derived by subtracting the Taylor expansions for f(x₀+h) and f(x₀−h); the O(h) error terms cancel, leaving error O(h²). Most accurate first-derivative scheme for interior points. Requires function values on both sides of x₀.",
+        "connections": ["C10", "C11", "C49", "C50", "C52"]
+      },
+      {
+        "id": "C52",
+        "label": "Second Derivative Finite Difference",
+        "category": "Finite Differences",
+        "content": "f''(x₀) ≈ [f(x₀+h) − 2f(x₀) + f(x₀−h)] / h². Derived by adding (not subtracting) the Taylor expansions for f(x₀+h) and f(x₀−h); odd-order terms cancel, yielding the second-derivative term. Error is O(h²).",
+        "connections": ["C10", "C11", "C49", "C50", "C51"]
+      }
+    ],
+    "edge_summary": [
+      {"from": "C01", "to": ["C02", "C03", "C04", "C05"]},
+      {"from": "C02", "to": ["C01", "C03", "C04", "C05"]},
+      {"from": "C03", "to": ["C01", "C04", "C05", "C06"]},
+      {"from": "C04", "to": ["C02", "C03", "C05", "C16"]},
+      {"from": "C05", "to": ["C01", "C02", "C06", "C07"]},
+      {"from": "C06", "to": ["C05", "C07", "C03", "C04"]},
+      {"from": "C07", "to": ["C05", "C06"]},
+      {"from": "C08", "to": ["C09", "C12", "C13"]},
+      {"from": "C09", "to": ["C08", "C10", "C11", "C40"]},
+      {"from": "C10", "to": ["C09", "C11", "C14", "C44", "C49", "C50", "C51", "C52"]},
+      {"from": "C11", "to": ["C10", "C14", "C40", "C41", "C42", "C49", "C50", "C51", "C52"]},
+      {"from": "C12", "to": ["C08", "C13", "C22", "C25"]},
+      {"from": "C13", "to": ["C12", "C22", "C25", "C27", "C29", "C31"]},
+      {"from": "C14", "to": ["C10", "C11", "C40", "C41", "C42", "C44"]},
+      {"from": "C15", "to": ["C16", "C23", "C26", "C28", "C30"]},
+      {"from": "C16", "to": ["C04", "C15", "C22", "C25", "C27", "C29"]},
+      {"from": "C22", "to": ["C12", "C13", "C15", "C16", "C23", "C25"]},
+      {"from": "C23", "to": ["C15", "C22", "C26", "C28", "C30"]},
+      {"from": "C25", "to": ["C12", "C13", "C16", "C22", "C26", "C27"]},
+      {"from": "C26", "to": ["C15", "C23", "C25", "C28"]},
+      {"from": "C27", "to": ["C13", "C25", "C16", "C28", "C29"]},
+      {"from": "C28", "to": ["C15", "C26", "C27", "C30"]},
+      {"from": "C29", "to": ["C13", "C27", "C16", "C30", "C31"]},
+      {"from": "C30", "to": ["C15", "C28", "C29", "C31"]},
+      {"from": "C31", "to": ["C13", "C29", "C30", "C32"]},
+      {"from": "C32", "to": ["C31", "C33", "C34"]},
+      {"from": "C33", "to": ["C32", "C34"]},
+      {"from": "C34", "to": ["C32", "C33"]},
+      {"from": "C35", "to": ["C36", "C37"]},
+      {"from": "C36", "to": ["C35", "C37"]},
+      {"from": "C37", "to": ["C35", "C36"]},
+      {"from": "C38", "to": ["C39", "C40", "C41", "C42"]},
+      {"from": "C39", "to": ["C38", "C40"]},
+      {"from": "C40", "to": ["C09", "C11", "C14", "C38", "C39", "C41", "C42"]},
+      {"from": "C41", "to": ["C11", "C14", "C38", "C40", "C42"]},
+      {"from": "C42", "to": ["C11", "C14", "C38", "C40", "C41"]},
+      {"from": "C43", "to": ["C44", "C45", "C46", "C47", "C48"]},
+      {"from": "C44", "to": ["C10", "C43", "C45", "C46", "C48"]},
+      {"from": "C45", "to": ["C43", "C44", "C46", "C47", "C48"]},
+      {"from": "C46", "to": ["C43", "C44", "C45", "C47", "C48"]},
+      {"from": "C47", "to": ["C45", "C46", "C48"]},
+      {"from": "C48", "to": ["C43", "C44", "C45", "C46", "C47"]},
+      {"from": "C49", "to": ["C10", "C11", "C50", "C51", "C52"]},
+      {"from": "C50", "to": ["C10", "C11", "C49", "C51", "C52"]},
+      {"from": "C51", "to": ["C10", "C11", "C49", "C50", "C52"]},
+      {"from": "C52", "to": ["C10", "C11", "C49", "C50", "C51"]}
+    ]
+  }
+}
