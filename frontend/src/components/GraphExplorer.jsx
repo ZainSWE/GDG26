@@ -1,5 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import course from '../data/courseData'
+import {
+  courseSourceOptions,
+  getDefaultCourseSource,
+  loadCourseDataFromSource,
+  normalizeCourseData,
+} from '../data/courseData'
 import './GraphExplorer.css'
 
 function toPoint(percentX, percentY) {
@@ -71,13 +76,15 @@ function GraphNode({ id, title, active, emphasis, style, type, onPointerEnter, o
   )
 }
 
-export default function GraphExplorer() {
+export default function GraphExplorer({ jsonData = null }) {
   const [zoomLevel, setZoomLevel] = useState(0)
   const [hoveredNode, setHoveredNode] = useState(null)
-  const [activeUnitId, setActiveUnitId] = useState(course.units[0]?.id || '')
+  const [activeUnitId, setActiveUnitId] = useState('')
   const [activeConceptId, setActiveConceptId] = useState('')
-  const [courseData, setCourseData] = useState(course)
-  const [uploadError, setUploadError] = useState('')
+  const [courseData, setCourseData] = useState({ id: 'course', name: 'Course', units: [] })
+  const [sourcePath, setSourcePath] = useState(getDefaultCourseSource())
+  const [loadingSource, setLoadingSource] = useState(false)
+  const [sourceError, setSourceError] = useState('')
   const stageRef = useRef(null)
 
   const activeUnit = courseData.units.find((unit) => unit.id === activeUnitId) || courseData.units[0]
@@ -97,113 +104,47 @@ export default function GraphExplorer() {
     }
   }, [courseData])
 
-  function normalizeCourse(raw) {
-    // If already in expected shape, return directly
-    if (raw && raw.units && Array.isArray(raw.units)) {
-      return {
-        id: raw.id || raw.courseId || 'course',
-        name: raw.name || raw.title || 'Course',
-        units: raw.units.map((u, ui) => ({
-          id: u.id || `unit_${ui + 1}`,
-          name: u.name || u.title || (`Unit ${ui + 1}`),
-          concepts: (u.concepts || u.topics || []).map((c, ci) => ({
-            id: c.id || `c_${ui}_${ci}`,
-            name: c.name || c.title || (`Concept ${ci + 1}`),
-            summary: c.summary || c.content || c.description || '',
-            examples: c.examples || c.formulas || [],
-            additional: c.additional || { unitContext: '' , related: [] },
-            importance: c.importance || 3,
-          })),
-        })),
-      }
+  // When a graph is passed in from the backend, use it directly
+  useEffect(() => {
+    if (jsonData) {
+      setCourseData(normalizeCourseData(jsonData))
+      setZoomLevel(0)
     }
+  }, [jsonData])
 
-    // If data has nodes array (graph-style), try to infer hierarchy
-    if (raw && raw.nodes && Array.isArray(raw.nodes)) {
-      const nodesById = Object.fromEntries(raw.nodes.map((n) => [n.id, n]))
+  useEffect(() => {
+    let cancelled = false
 
-      // Heuristic: root = node with highest importance or largest connected length
-      let root = raw.nodes.find((n) => n.id === 'root_001')
-      if (!root) {
-        root = raw.nodes.slice().sort((a, b) => (b.importance || 0) - (a.importance || 0))[0]
+    async function loadSource() {
+      if (!sourcePath) {
+        return
       }
 
-      // units: nodes that have "unit" in id or title, or directly connected to root
-      const unitCandidates = raw.nodes.filter((n) => /unit/i.test(n.id || '') || /unit/i.test(n.title || '') || (root && n.connected && root.connected.includes(n.id)))
+      setLoadingSource(true)
+      setSourceError('')
 
-      const units = unitCandidates.map((u, ui) => {
-        const connectedConceptIds = (u.connected || []).filter((cid) => {
-          const target = nodesById[cid]
-          if (!target) return false
-          return !/unit/i.test(target.id || '') && !(target.connected && target.connected.includes(u.id))
-        })
-
-        const concepts = connectedConceptIds.map((cid, ci) => {
-          const n = nodesById[cid]
-          return {
-            id: n.id,
-            name: n.title || n.name || n.id,
-            summary: n.content || n.summary || '',
-            examples: n.examples || [],
-            additional: { unitContext: n.content || '', related: [] },
-            importance: n.importance || 3,
-          }
-        })
-
-        return {
-          id: u.id,
-          name: u.title || u.name || `Unit ${ui + 1}`,
-          concepts,
-        }
-      })
-
-      return {
-        id: raw.id || (root && root.id) || 'course',
-        name: raw.title || root?.title || 'Course',
-        units: units.length ? units : raw.nodes.filter((n) => /unit/i.test(n.id || '')).map((u, ui) => ({ id: u.id, name: u.title || u.name || `Unit ${ui + 1}`, concepts: [] })),
-      }
-    }
-
-    // Fallback: wrap raw as single unit with nodes as concepts
-    if (Array.isArray(raw)) {
-      return {
-        id: 'course_auto',
-        name: 'Imported Course',
-        units: [
-          {
-            id: 'unit_auto_1',
-            name: 'Imported Unit',
-            concepts: raw.map((n, i) => ({ id: n.id || `c${i}`, name: n.title || n.name || `Concept ${i + 1}`, summary: n.content || '' })),
-          },
-        ],
-      }
-    }
-
-    return {
-      id: 'course_fallback',
-      name: 'Course',
-      units: [],
-    }
-  }
-
-  function handleUploadFile(file) {
-    setUploadError('')
-    const reader = new FileReader()
-    reader.onload = (e) => {
       try {
-        const parsed = JSON.parse(e.target.result)
-        const normalized = normalizeCourse(parsed)
-        if (normalized.units && normalized.units.length) {
-          setCourseData(normalized)
-        } else {
-          setUploadError('Imported file did not contain recognizable course structure.')
+        const nextCourse = await loadCourseDataFromSource(sourcePath)
+        if (!cancelled) {
+          setCourseData(nextCourse)
         }
-      } catch (err) {
-        setUploadError('Invalid JSON file')
+      } catch (error) {
+        if (!cancelled) {
+          setSourceError(error instanceof Error ? error.message : 'Failed to load JSON source')
+        }
+      } finally {
+        if (!cancelled) {
+          setLoadingSource(false)
+        }
       }
     }
-    reader.readAsText(file)
-  }
+
+    loadSource()
+
+    return () => {
+      cancelled = true
+    }
+  }, [sourcePath])
 
   const unitLayouts = useMemo(
     () => (courseData.units || []).map((unit, index) => ({ unit, ...getUnitLayout(index) })),
@@ -331,7 +272,22 @@ export default function GraphExplorer() {
           <p>One connected graph for units and concepts.</p>
         </div>
 
-        
+        <div className="source-switcher">
+          <label htmlFor="course-source">Test JSON</label>
+          <select
+            id="course-source"
+            value={sourcePath}
+            onChange={(event) => setSourcePath(event.target.value)}
+          >
+            {courseSourceOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          {loadingSource && <div className="source-switcher__status">Loading JSON...</div>}
+          {sourceError && <div className="source-switcher__status source-switcher__status--error">{sourceError}</div>}
+        </div>
 
         <div className={`nav-item nav-item--root ${zoomLevel === 0 ? 'is-active' : ''}`}>
           Course Overview

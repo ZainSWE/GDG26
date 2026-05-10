@@ -1,20 +1,32 @@
+:root {
+  font-family: Inter, 'Segoe UI', Roboto, sans-serif;
+  color: #10213f;
+  background: #f8fbff;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-html, body, #root {
+html, body {
   font-family: 'Inter', sans-serif;
   font-optical-sizing: auto;
+}
+
+body {
+  background: #f8fbff;
+}
+
+#root {
   width: 100%;
-  height: 100%;
-  color: white;
+  min-height: 100svh;
 }
 
 h1 { font-weight: 700; }
-h2 { font-weight: 600; }
-p  { font-weight: 400; }
+h2 { font-weight: 600; margin-top: 0; margin-bottom: 10px; }
+p  { font-weight: 400; margin: 0; }
 
 .text-normal { font-size: 16px; }
 .text-footer { font-size: 14px; }
