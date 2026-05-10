@@ -86,6 +86,18 @@ function SvgNode({ cx, cy, r, label, color, isHovered, isActive, isDimmed, type 
   )
 }
 
+function examplesNotAlreadyInSummary(summary, examples) {
+  const s = (summary || '').trim()
+  const lower = s.toLowerCase()
+  return (examples || []).filter((ex) => {
+    const t = (typeof ex === 'string' ? ex : '').trim()
+    if (!t) return false
+    if (t === s) return false
+    if (lower.includes(t.toLowerCase())) return false
+    return true
+  })
+}
+
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export default function GraphExplorer({ jsonData = null }) {
@@ -105,6 +117,11 @@ export default function GraphExplorer({ jsonData = null }) {
 
   const activeUnit    = courseData.units.find((u) => u.id === activeUnitId) || courseData.units[0]
   const activeConcept = activeUnit?.concepts.find((c) => c.id === activeConceptId) || null
+
+  const conceptDetailExamples = useMemo(
+    () => activeConcept ? examplesNotAlreadyInSummary(activeConcept.summary, activeConcept.examples) : [],
+    [activeConcept],
+  )
 
   // ── Data loading ────────────────────────────────────────────────────────────
 
@@ -563,27 +580,27 @@ export default function GraphExplorer({ jsonData = null }) {
         <aside className="detail-panel">
           {activeConcept ? (
             <div className="detail-card" style={{ '--accent': activeUnitColor }}>
-              <div className="detail-card__prompt">Concept</div>
+              <div className="detail-card__eyebrow">Concept Zoom</div>
               <h2>{activeConcept.name}</h2>
               <p className="detail-card__unit">{activeUnit?.name}</p>
 
               <div className="detail-section">
                 <h3>Summary</h3>
-                <p>{activeConcept.summary}</p>
+                <p>{activeConcept.summary || '—'}</p>
               </div>
 
-              <div className="detail-section">
-                <h3>Examples / Formulas</h3>
-                <ul>
-                  {(activeConcept.examples?.length ? activeConcept.examples : [activeConcept.summary]).map((ex, j) => (
-                    <li key={j}>{ex}</li>
-                  ))}
-                </ul>
-              </div>
+              {conceptDetailExamples.length > 0 && (
+                <div className="detail-section">
+                  <h3>Examples / Formulas</h3>
+                  <ul>
+                    {conceptDetailExamples.map((example, index) => (
+                      <li key={`${example}-${index}`}>{example}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
               <div className="detail-section">
-                <h3>Context</h3>
-                <p>{activeConcept.additional?.unitContext}</p>
                 <p className="detail-card__meta">Importance {activeConcept.importance}/5</p>
               </div>
 
@@ -600,8 +617,8 @@ export default function GraphExplorer({ jsonData = null }) {
             </div>
           ) : (
             <div className="detail-card detail-card--empty">
-              <div className="detail-card__prompt">Explore</div>
-              <p>Hover or click a unit node to reveal its concepts. Click a concept to pull its summary here.</p>
+              <div className="detail-card__prompt">Small steps build strong understanding</div>
+              <p>Zoom over a unit node to reveal its concepts. Zoom further into a concept node to bring its summary and formulas into view here.</p>
               <p className="detail-card__hint">Scroll over a node to zoom · Click background to zoom out</p>
             </div>
           )}
