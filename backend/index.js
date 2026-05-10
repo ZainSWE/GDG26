@@ -2,15 +2,47 @@
 
 require("dotenv").config();
 
-const fs = require("node:fs/promises");
-const path = require("node:path");
 const express = require("express");
+const mongoose = require("mongoose");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
+const { z } = require("zod");
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash";
-const savedResponsePath = path.join(__dirname, "last-gemini-response.json");
+
+// Zod schema — mirrors the requirements in the system prompt exactly
+const nodeSchema = z.object({
+  id: z.string().min(1),
+  title: z.string().min(1),
+  content: z.string().min(1),
+  connected: z.array(z.string()),
+  importance: z.number().int().min(1).max(5),
+});
+
+const graphSchema = z.object({
+  nodes: z.array(nodeSchema).min(1),
+});
+
+// Mongoose schema and model
+const graphRecordSchema = new mongoose.Schema(
+  {
+    notes: { type: String, required: true },
+    model: { type: String, required: true },
+    responseText: { type: String, required: true },
+    graph: { type: mongoose.Schema.Types.Mixed, required: true },
+  },
+  { timestamps: true }
+);
+
+const GraphRecord = mongoose.model("GraphRecord", graphRecordSchema);
+
+async function connectDB() {
+  const uri = process.env.MONGODB_URI;
+  if (!uri) throw new Error("MONGODB_URI is not set in .env");
+  await mongoose.connect(uri);
+  console.log("Connected to MongoDB");
+}
 
 app.use(express.json());
 app.use((_, res, next) => {
@@ -24,8 +56,41 @@ app.options("*", (_req, res) => {
   res.sendStatus(204);
 });
 
-async function saveGeminiResponse(payload) {
-  await fs.writeFile(savedResponsePath, JSON.stringify(payload, null, 2), "utf8");
+async function saveToMongo(payload) {
+  const record = new GraphRecord(payload);
+  await record.save();
+  return record;
+}
+
+function parseAndValidateGraph(raw) {
+  let cleaned = raw.trim();
+
+  // Extract JSON from inside a code fence if present (anywhere in the response)
+  const fenceMatch = cleaned.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  if (fenceMatch) {
+    cleaned = fenceMatch[1].trim();
+  } else {
+    // Fall back: find the outermost { ... } block
+    const start = cleaned.indexOf("{");
+    const end = cleaned.lastIndexOf("}");
+    if (start !== -1 && end !== -1 && end > start) {
+      cleaned = cleaned.slice(start, end + 1);
+    }
+  }
+
+  let parsed;
+  try {
+    parsed = JSON.parse(cleaned);
+  } catch {
+    throw new Error("Gemini returned text that is not valid JSON");
+  }
+
+  const result = graphSchema.safeParse(parsed);
+  if (!result.success) {
+    throw new Error(`Graph failed Zod validation: ${result.error.message}`);
+  }
+
+  return result.data;
 }
 
 async function generateWithGemini(notes) {
@@ -156,12 +221,15 @@ Now analyze the provided notes and generate the complete connected knowledge gra
   const result = await model.generateContent(prompt);
   const responseText = result.response.text();
 
-  console.log("Gemini response generated:", responseText);
+  console.log("Gemini raw response:", responseText);
+
+  const graph = parseAndValidateGraph(responseText);
+  console.log(`Graph validated — ${graph.nodes.length} nodes`);
 
   return {
     model: GEMINI_MODEL,
-    prompt,
     responseText,
+    graph,
     createdAt: new Date().toISOString(),
   };
 }
@@ -179,15 +247,23 @@ app.post("/generate", async (req, res) => {
     }
 
     const geminiResult = await generateWithGemini(notes);
-    await saveGeminiResponse({
+
+    const record = await saveToMongo({
       notes,
-      ...geminiResult,
+      model: geminiResult.model,
+      responseText: geminiResult.responseText,
+      graph: geminiResult.graph,
     });
 
     return res.status(200).json({
       success: true,
-      message: "Gemini response generated and saved",
-      data: geminiResult,
+      message: "Gemini response validated and saved to MongoDB",
+      data: {
+        id: record._id,
+        model: geminiResult.model,
+        createdAt: geminiResult.createdAt,
+        graph: geminiResult.graph,
+      },
     });
   } catch (error) {
     return res.status(500).json({
@@ -203,6 +279,14 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ message: "Internal server error" });
 });
 
-app.listen(PORT, () => {
-  console.log(`Memory Palace skeleton server running on port ${PORT}`);
+async function start() {
+  await connectDB();
+  app.listen(PORT, () => {
+    console.log(`Memory Palace backend running on port ${PORT}`);
+  });
+}
+
+start().catch((err) => {
+  console.error("Failed to start:", err);
+  process.exit(1);
 });
