@@ -3,7 +3,7 @@ import { gsap } from 'gsap'
 import { useMagneticGroup } from '../hooks/useMagneticButton'
 import './TextInput.css'
 
-const BACKEND_URL = 'http://localhost:4000'
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'https://gdg26.onrender.com'
 
 // ── DEV PLACEHOLDER ───────────────────────────────────────────────────────────
 // Bypasses the backend and returns a static graph so you can develop without

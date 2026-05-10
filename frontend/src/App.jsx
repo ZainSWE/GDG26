@@ -8,6 +8,11 @@ import TextInput from './components/TextInput'
 import GraphExplorer from './components/GraphExplorer'
 import About from './pages/About'
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'https://gdg26.onrender.com'
+
+// Wake up the Render backend immediately on page load
+fetch(`${BACKEND_URL}/health`).catch(() => {})
+
 export default function App() {
   const [graphData, setGraphData] = useState(null)
 

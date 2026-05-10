@@ -46,6 +46,10 @@ async function connectDB() {
   console.log("Connected to MongoDB");
 }
 
+app.get("/", (req, res) => {
+  res.send("Backend running");
+});
+
 app.use(express.json());
 app.use((_, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
