@@ -1,8 +1,8 @@
-# Memory Palace
+# MindMesh
 
 > Turn your course notes into an interactive knowledge graph — powered by Google Gemini AI.
 
-Memory Palace takes any educational material (plain text or PDF) and transforms it into a navigable visual graph of concepts, units, and their relationships. Built as a hackathon project for GDG 2026.
+MindMesh takes any educational material (plain text or PDF) and transforms it into a navigable visual graph of concepts, units, and their relationships. Built as a hackathon project for GDG 2026.
 
 ---
 
